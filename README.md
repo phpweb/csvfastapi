@@ -5,3 +5,4 @@
 - Generate .env file on the server
 - Check requirements.txt file
 - Learn to create SSH keys: https://zellwk.com/blog/github-actions-deploy/
+new
