@@ -5,12 +5,17 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from config import get_settings
 
 
 class LoginOnly:
     def __init__(self):
-        ser = Service("/Users/r.gezer/Documents/htdocs/python/fastapi/chromedriver")
-        self.tv_trend_csv_download_path = "/Users/r.gezer/Documents/htdocs/python/fastapi/csv/"
+        self.settings = get_settings()
+        service = Service(self.settings.chrome_driver_path)
+        # service = Service(executable_path=ChromeDriverManager().install())
+        # self.tv_trend_csv_download_path = "/Users/r.gezer/Documents/htdocs/python/fastapi/csv/"
+        self.tv_trend_csv_download_path = self.settings.tv_trend_csv_download_path
         self.csv_file_name_volume_15m = self.tv_trend_csv_download_path + 'crypto_' + datetime.today().strftime(
             '%Y-%m-%d') + '.csv'
         preferences = {"download.prompt_for_download": False,
@@ -23,7 +28,7 @@ class LoginOnly:
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_experimental_option("prefs", preferences)
 
-        self.driver = webdriver.Chrome(service=ser, options=self.chrome_options)
+        self.driver = webdriver.Chrome(service=service, options=self.chrome_options)
 
         self.vars = {}
         self.screener_login_url = "https://www.tradingview.com/crypto-screener/#signin"
@@ -135,6 +140,7 @@ class LoginOnly:
 
 
 # lg = LoginOnly()
+# print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()
 # lg.another_one_for_screener_login()
 # lg.download_tv_trend_csv()
