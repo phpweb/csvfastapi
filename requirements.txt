@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+gunicorn
+pandas
+selenium
+websocket-client
+sqlalchemy
+APScheduler
+unicorn_binance_websocket_api
+python-dotenv

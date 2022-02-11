@@ -4,3 +4,4 @@ app.log
 venv
 PID_FILE
 .idea
+.idea/*
