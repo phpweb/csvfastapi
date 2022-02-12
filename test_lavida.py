@@ -12,6 +12,8 @@ class LoginOnly:
     def __init__(self):
         self.settings = get_settings()
         service = Service(self.settings.chrome_driver_path)
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         # service = Service(executable_path=ChromeDriverManager().install())
         # self.tv_trend_csv_download_path = "/Users/r.gezer/Documents/htdocs/python/fastapi/csv/"
         self.tv_trend_csv_download_path = self.settings.tv_trend_csv_download_path
@@ -25,6 +27,8 @@ class LoginOnly:
                        "profile.default_content_setting_values.automatic_downloads": 1
                        }
         self.chrome_options = webdriver.ChromeOptions()
+        self.chrome_options.add_argument('--no-sandbox')
+        self.chrome_options.add_argument('--disable-dev-shm-usage')
         self.chrome_options.add_experimental_option("prefs", preferences)
 
         self.driver = webdriver.Chrome(service=service, options=self.chrome_options)
