@@ -5,3 +5,4 @@ venv
 PID_FILE
 .idea
 .idea/*
+chromedriver
