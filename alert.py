@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World ramazan test"}
+    return {"message": "Hello World ramazan test neci be"}
 
 
 @app.get("/csv")
