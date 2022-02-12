@@ -138,10 +138,10 @@ daemon = False
 
 # raw_env - Set environment variable (key=value)
 # Pass variables to the execution environment.
-raw_env = [
-    'API_KEY=' + os.getenv('API_KEY'),
-    'API_SECRET=' + os.getenv('API_SECRET'),
-]
+# raw_env = [
+#     'API_KEY=' + os.getenv('API_KEY'),
+#     'API_SECRET=' + os.getenv('API_SECRET'),
+# ]
 
 # pidfile - A filename to use for the PID file
 # If not set, no PID file will be written.
