@@ -99,7 +99,8 @@ class LoginOnly:
         time.sleep(sleep_time)
         element = self.driver.find_element(By.XPATH, '//div[@title="Screens"]')
         element.click()
-        element = self.driver.find_element(By.XPATH, '//span[text()="VolumeFxCanli"]')
+        # element = self.driver.find_element(By.XPATH, '//span[text()="VolumeFxCanli"]')
+        element = self.driver.find_element(By.XPATH, '//div[@data-set="2806115"]')
         element.click()
         element = self.driver.find_element(By.XPATH, '//div[text()="VolumeFxCanli"]')
         time.sleep(sleep_time)
@@ -112,9 +113,9 @@ class LoginOnly:
         element = self.driver.find_element(By.XPATH, f'//div[@title="{time_frame}"]')
         time.sleep(sleep_time)
         element.click()
-        time.sleep(sleep_time)
+        # time.sleep(sleep_time)
         element = self.driver.find_element(By.XPATH, '//div[@title="Export screener data to a CSV file"]')
-        time.sleep(sleep_time)
+        # time.sleep(sleep_time)
         element.click()
         return self.driver
 
