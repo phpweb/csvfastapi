@@ -8,5 +8,6 @@ def get_current_price(symbol):
 
 
 def calculate_win_los_percent_with_decimal(start_price, end_price):
+    """It should work now"""
     price_diff = ((float(start_price) / float(end_price)) * 100.00) - 100.00
     return round(price_diff, 2)
