@@ -10,3 +10,4 @@ unicorn_binance_websocket_api
 python-dotenv
 pydantic
 requests
+fastapi-mail

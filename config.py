@@ -7,6 +7,12 @@ class Settings(BaseSettings):
     chrome_driver_path: str
     env: str
     database_url: str
+    mail_username: str
+    mail_password: str
+    mail_from: str
+    mail_port: int
+    mail_server: str
+    mail_from_name: str
 
     class Config:
         env_file = ".env"
