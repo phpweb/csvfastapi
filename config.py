@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     tv_trend_csv_download_path: str
     chrome_driver_path: str
+    env: str
 
     class Config:
         env_file = ".env"
