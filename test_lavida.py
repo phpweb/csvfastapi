@@ -6,6 +6,12 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from config import get_settings
+from database import SessionLocal, engine
+from models import TvScreenerSignals, Base
+import utils as utils
+
+db = SessionLocal()
+Base.metadata.create_all(engine)
 
 
 class LoginOnly:
@@ -128,19 +134,25 @@ class LoginOnly:
         df = df[(df['Ticker'].str.endswith('USDT', na=False))]
         df = df[(df['Moving Averages Rating'] == 'Strong Buy')]
         print(df)
+        if len(df['Ticker']) > 0:
+            for ticker in df['Ticker']:
+                Base.metadata.create_all(engine)
+                existing_symbol = db.query(TvScreenerSignals).filter_by(symbol=ticker).first()
+                how_many = 0
+                price = utils.get_current_price(ticker)
+                percent = 0
+                if existing_symbol is not None:
+                    how_many = existing_symbol.how_many + 1
+                    percent = utils.calculate_win_los_percent_with_decimal(existing_symbol.price, price)
+                tv_signal = TvScreenerSignals(
+                    symbol=ticker,
+                    how_many=how_many,
+                    price=price,
+                    percent=percent
+                )
+                db.add(tv_signal)
+            db.commit()
         os.remove(self.csv_file_name_volume_15m)
-        # if len(df['Ticker']) > 0:
-        #     driver = self.open_chart(csv_file_driver)
-        #     for ticker in df['Ticker']:
-        #         saved_signal = TvScreenerSignals.query.filter_by(symbol=ticker).first()
-        #         persist_tv_screener_signals(symbol=ticker)
-        #         if saved_signal is None:
-        #             time.sleep(2)
-        #             self.test_timeframe_5m(driver, ticker)
-        #     time.sleep(3)
-        #     driver.quit()
-
-
 # lg = LoginOnly()
 # print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()
