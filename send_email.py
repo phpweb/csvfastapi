@@ -15,7 +15,7 @@ conf = ConnectionConfig(
     TEMPLATE_FOLDER='./templates/email'
 )
 
-
+# it should work
 def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
     message = MessageSchema(
         subject=subject,
