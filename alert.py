@@ -2,7 +2,7 @@ import time
 from typing import Optional
 from fastapi import FastAPI, BackgroundTasks
 from test_lavida import LoginOnly
-from send_email import send_email_background
+from send_email import send_email_background, send_simple_email
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 app = FastAPI()
@@ -50,8 +50,7 @@ async def download_volume_15m():
     csv_import = LoginOnly()
     email_message_list = csv_import.download_csv_file_and_set_alerts_volume_15m()
     if len(email_message_list) > 0:
-        background_tasks = BackgroundTasks()
-        send_email_background(background_tasks, '15 minutes', 'phpwebentwickler@gmail.com', email_message_list)
+        await send_simple_email('15 minutes', 'phpwebentwickler@gmail.com', email_message_list)
 
 
 @app.get("/del_schedule/{job_id}", tags=["schedule"])
