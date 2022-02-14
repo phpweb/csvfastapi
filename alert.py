@@ -7,7 +7,7 @@ from send_email import send_email_background, send_simple_email
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 app = FastAPI()
-Schedule = AsyncIOScheduler()
+Schedule = AsyncIOScheduler(timezone="Europe/Berlin")
 Schedule.start()
 
 

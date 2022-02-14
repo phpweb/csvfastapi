@@ -11,3 +11,4 @@ python-dotenv
 pydantic
 requests
 fastapi-mail
+fastapi_utils
