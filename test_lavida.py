@@ -154,11 +154,12 @@ class LoginOnly:
                     price=price,
                     percent=percent
                 )
-                email_message_dict['symbol'] = ticker
-                email_message_dict['how_many'] = how_many
-                email_message_dict['percent'] = percent
-                email_message_dict['current_price'] = price
-                email_message_list.append(email_message_dict)
+                if how_many == 0 and percent > 0.50:
+                    email_message_dict['symbol'] = ticker
+                    email_message_dict['how_many'] = how_many
+                    email_message_dict['percent'] = percent
+                    email_message_dict['current_price'] = price
+                    email_message_list.append(email_message_dict)
                 db.add(tv_signal)
             db.commit()
         os.remove(self.csv_file_name_volume_15m)
