@@ -12,12 +12,8 @@
 import multiprocessing
 import os
 from dotenv import load_dotenv
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 load_dotenv()
-
-Schedule = AsyncIOScheduler(timezone="Europe/Berlin")
-
 # ===============================================
 #           Server Socket
 # ===============================================
@@ -349,7 +345,6 @@ def on_starting(server):
 
     The callable needs to accept a single instance variable for the Arbiter.
     """
-    Schedule.start()
     print("Server has started ramazan")
 
 
