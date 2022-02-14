@@ -154,7 +154,7 @@ class LoginOnly:
                     price=price,
                     percent=percent
                 )
-                if how_many == 0 and percent > 0.50:
+                if how_many == 0 or percent > 0.50:
                     email_message_dict['symbol'] = ticker
                     email_message_dict['how_many'] = how_many
                     email_message_dict['percent'] = percent
