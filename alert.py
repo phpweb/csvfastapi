@@ -1,6 +1,7 @@
 import time
+import requests
 from typing import Optional
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, Request
 from test_lavida import LoginOnly
 from send_email import send_email_background, send_simple_email
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -36,21 +37,32 @@ async def get_scheduled_syncs():
     return schedules
 
 
+# @app.get("/start_schedule/{job_id}", tags=["schedule"])
+# async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 15):
+#     function_mappings = {
+#         'download_volume_15m': download_volume_15m,
+#     }
+#     scheduled_job = Schedule.add_job(function_mappings[job_id], 'interval', seconds=interval, id=job_id)
+#     return {"Scheduled": True, "JobID": scheduled_job.id}
+
 @app.get("/start_schedule/{job_id}", tags=["schedule"])
-async def scheduled_task_start(job_id: str, interval: Optional[int] = 15):
-    function_mappings = {
-        'download_volume_15m': download_volume_15m,
-    }
-    scheduled_job = Schedule.add_job(function_mappings[job_id], 'interval', seconds=interval, id=job_id)
+async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 15):
+    scheduled_job = Schedule.add_job(download_volume_15m, 'interval', [request], seconds=interval, id=job_id)
     return {"Scheduled": True, "JobID": scheduled_job.id}
 
 
-async def download_volume_15m():
-    print('download_volume_15m is running')
-    csv_import = LoginOnly()
-    email_message_list = csv_import.download_csv_file_and_set_alerts_volume_15m()
-    if len(email_message_list) > 0:
-        await send_simple_email('15 minutes', 'phpwebentwickler@gmail.com', email_message_list)
+# async def download_volume_15m():
+#     print('download_volume_15m is running')
+#     csv_import = LoginOnly()
+#     email_message_list = csv_import.download_csv_file_and_set_alerts_volume_15m()
+#     if len(email_message_list) > 0:
+#         await send_simple_email('15 minutes', 'phpwebentwickler@gmail.com', email_message_list)
+
+def download_volume_15m(request: Request):
+    base_url = request.base_url
+    print('base url')
+    print(base_url)
+    r = requests.get(str(base_url) + 'csv')
 
 
 @app.get("/del_schedule/{job_id}", tags=["schedule"])
