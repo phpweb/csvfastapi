@@ -345,7 +345,7 @@ def on_starting(server):
 
     The callable needs to accept a single instance variable for the Arbiter.
     """
-    pass
+    print("Server has started ramazan")
 
 
 def on_reload(server):
