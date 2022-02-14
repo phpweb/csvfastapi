@@ -66,7 +66,7 @@ def download_volume_15m(request: Request):
     endpoint = str(base_url) + 'csv'
     if get_settings().env != 'dev':
         endpoint = str(base_url) + 'app/csv'
-    r = requests.get(str(base_url) + 'csv')
+    r = requests.get(endpoint)
 
 
 @app.get("/del_schedule/{job_id}", tags=["schedule"])
