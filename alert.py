@@ -47,7 +47,7 @@ async def get_scheduled_syncs():
 #     return {"Scheduled": True, "JobID": scheduled_job.id}
 
 @app.get("/start_schedule/{job_id}", tags=["schedule"])
-async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 15):
+async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 20):
     scheduled_job = Schedule.add_job(download_volume_15m, 'interval', [request], seconds=interval, id=job_id)
     return {"Scheduled": True, "JobID": scheduled_job.id}
 
