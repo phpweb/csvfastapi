@@ -4,12 +4,10 @@ from typing import Optional
 from fastapi import FastAPI, BackgroundTasks, Request
 from test_lavida import LoginOnly
 from send_email import send_email_background, send_simple_email
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from config import get_settings
+from gunicorn import Schedule
 
 app = FastAPI()
-Schedule = AsyncIOScheduler(timezone="Europe/Berlin")
-Schedule.start()
 
 
 @app.get("/")
