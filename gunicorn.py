@@ -268,7 +268,7 @@ access_logformat = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" \
 
 # errorlog - The Error log file to write to.
 # “-” means log to stderr.
-error_logfile = "-"
+error_logfile = "app.log"
 
 # loglevel - The granularity of Error log outputs.
 # Valid level names are:
