@@ -8,11 +8,11 @@
         {% if symbol.how_many == 0 %}
           <h3 style="font-size: 24px; background: blue;">New</h3><br/>
           <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
-          How many today: {{ symbol.how_many }}<br/>
-          Last percent change: {{ symbol.percent }}<br/>
+          Current price: {{ symbol.current_price }}<br/>
         {% else %}
           <h3 style="font-size: 24px; background: gray;">Old</h3><br/>
           <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
+          Current price: {{ symbol.current_price }}<br/>
           How many today: {{ symbol.how_many }}<br/>
           Last percent change: {{ symbol.percent }}<br/>
         {% endif %}

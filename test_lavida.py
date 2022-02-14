@@ -155,6 +155,7 @@ class LoginOnly:
                 email_message_dict['symbol'] = ticker
                 email_message_dict['how_many'] = how_many
                 email_message_dict['percent'] = percent
+                email_message_dict['current_price'] = price
                 email_message_list.append(email_message_dict)
                 db.add(tv_signal)
             db.commit()
