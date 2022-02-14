@@ -5,6 +5,7 @@ from fastapi import FastAPI, BackgroundTasks, Request
 from test_lavida import LoginOnly
 from send_email import send_email_background, send_simple_email
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from config import get_settings
 
 app = FastAPI()
 Schedule = AsyncIOScheduler(timezone="Europe/Berlin")
@@ -62,6 +63,9 @@ def download_volume_15m(request: Request):
     base_url = request.base_url
     print('base url')
     print(base_url)
+    endpoint = str(base_url) + 'csv'
+    if get_settings().env != 'dev':
+        endpoint = str(base_url) + 'app/csv'
     r = requests.get(str(base_url) + 'csv')
 
 
