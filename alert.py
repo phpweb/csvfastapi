@@ -48,14 +48,8 @@ async def get_scheduled_syncs():
 
 @app.get("/start_schedule/{job_id}", tags=["schedule"])
 async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 15):
-    base_url = request.base_url
-    print('base url')
-    print(base_url)
-    endpoint = str(base_url) + 'csv'
-    if get_settings().env != 'dev':
-        endpoint = str(base_url) + 'app/csv'
     scheduled_job = Schedule.add_job(download_volume_15m, 'interval', [request], seconds=interval, id=job_id)
-    return {"Scheduled": True, "JobID": scheduled_job.id, "endpoind": endpoint}
+    return {"Scheduled": True, "JobID": scheduled_job.id}
 
 
 # async def download_volume_15m():
@@ -71,7 +65,7 @@ def download_volume_15m(request: Request):
     print(base_url)
     endpoint = str(base_url) + 'csv'
     if get_settings().env != 'dev':
-        endpoint = str(base_url) + 'app/csv'
+        endpoint = "https://csvfastapi.mamacita-fashion.com/app/csv"
     r = requests.get(endpoint)
 
 
