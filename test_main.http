@@ -9,7 +9,15 @@ Accept: application/json
 
 ###
 
-GET http://127.0.0.1:8000/send-email/backgroundtasks
+GET http://127.0.0.1:8000/start_schedule/download_volume_15m
 Accept: application/json
 
 ###
+
+GET http://127.0.0.1:8000/schedule/show_schedules/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/del_schedule/download_volume_15m
+Accept: application/json
