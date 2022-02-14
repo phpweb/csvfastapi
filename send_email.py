@@ -1,6 +1,7 @@
 from fastapi import BackgroundTasks
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from config import get_settings
+
 settings = get_settings()
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.mail_username,
@@ -15,7 +16,7 @@ conf = ConnectionConfig(
     TEMPLATE_FOLDER='./templates/email'
 )
 
-# it should work
+
 def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
     message = MessageSchema(
         subject=subject,

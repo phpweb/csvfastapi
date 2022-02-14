@@ -134,8 +134,10 @@ class LoginOnly:
         df = df[(df['Ticker'].str.endswith('USDT', na=False))]
         df = df[(df['Moving Averages Rating'] == 'Strong Buy')]
         print(df)
+        email_message_list = []
         if len(df['Ticker']) > 0:
             for ticker in df['Ticker']:
+                email_message_dict = {}
                 Base.metadata.create_all(engine)
                 existing_symbol = db.query(TvScreenerSignals).filter_by(symbol=ticker).first()
                 how_many = 0
@@ -150,9 +152,16 @@ class LoginOnly:
                     price=price,
                     percent=percent
                 )
+                email_message_dict['symbol'] = ticker
+                email_message_dict['how_many'] = how_many
+                email_message_dict['percent'] = percent
+                email_message_list.append(email_message_dict)
                 db.add(tv_signal)
             db.commit()
         os.remove(self.csv_file_name_volume_15m)
+        print('Email message')
+        print(email_message_list)
+        return email_message_list
 # lg = LoginOnly()
 # print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()
