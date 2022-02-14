@@ -363,7 +363,7 @@ def when_ready(server):
 
     The callable needs to accept a single instance variable for the Arbiter.
     """
-    pass
+    print("Server has started ramazan when_ready")
 
 
 def pre_fork(server, worker):
