@@ -52,32 +52,40 @@ class LoginOnly:
         self.driver.quit()
 
     def for_general_login(self):
-        self.driver.get(self.general_login_url)
-        self.driver.set_window_size(1920, 1055)
-        self.driver.find_element(By.CSS_SELECTOR, ".tv-header__user-menu-button > svg").click()
-        time.sleep(0.500)
-        self.driver.find_element(By.CSS_SELECTOR, ".item-2IihgTnv").click()
-        time.sleep(0.500)
-        self.driver.find_element(By.CSS_SELECTOR, ".js-show-email").click()
-        self.driver.find_element(By.NAME, "username").send_keys(self.tv_username)
-        self.driver.find_element(By.NAME, "password").send_keys(self.tv_password)
-        self.driver.find_element(By.CSS_SELECTOR, ".tv-button__loader").click()
+        try:
+            self.driver.get(self.general_login_url)
+            self.driver.set_window_size(1920, 1055)
+            self.driver.find_element(By.CSS_SELECTOR, ".tv-header__user-menu-button > svg").click()
+            time.sleep(0.500)
+            self.driver.find_element(By.CSS_SELECTOR, ".item-2IihgTnv").click()
+            time.sleep(0.500)
+            self.driver.find_element(By.CSS_SELECTOR, ".js-show-email").click()
+            self.driver.find_element(By.NAME, "username").send_keys(self.tv_username)
+            self.driver.find_element(By.NAME, "password").send_keys(self.tv_password)
+            self.driver.find_element(By.CSS_SELECTOR, ".tv-button__loader").click()
+        except:
+            print('Something went wrong for_general_login')
+            self.logout()
 
     def another_one_for_screener_login(self):
-        self.driver.get(self.screener_login_url)
-        self.driver.set_window_size(1920, 1057)
-        self.driver.find_element(By.CSS_SELECTOR, ".tv-signin-dialog").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".js-show-email").click()
-        element = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((By.NAME, "username")))
-        element.send_keys(self.tv_username)
-        element = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((By.NAME, "password")))
-        element.send_keys(self.tv_password)
-        # self.driver.find_element(By.NAME, 'username').send_keys(self.tv_username)
-        # self.driver.find_element(By.NAME, 'password').send_keys(self.tv_password)
-        self.driver.find_element(By.CSS_SELECTOR, '.tv-button__loader').click()
-        return self.driver
+        try:
+            self.driver.get(self.screener_login_url)
+            self.driver.set_window_size(1920, 1057)
+            self.driver.find_element(By.CSS_SELECTOR, ".tv-signin-dialog").click()
+            self.driver.find_element(By.CSS_SELECTOR, ".js-show-email").click()
+            element = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.NAME, "username")))
+            element.send_keys(self.tv_username)
+            element = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.NAME, "password")))
+            element.send_keys(self.tv_password)
+            # self.driver.find_element(By.NAME, 'username').send_keys(self.tv_username)
+            # self.driver.find_element(By.NAME, 'password').send_keys(self.tv_password)
+            self.driver.find_element(By.CSS_SELECTOR, '.tv-button__loader').click()
+            return self.driver
+        except:
+            print('Something went wrong another_one_for_screener_login')
+            self.logout()
 
     def download_tv_trend_csv(self):
         # self.login()
@@ -108,24 +116,28 @@ class LoginOnly:
         return self.driver
 
     def download_relative_volume_trends(self, time_frame='15 minutes'):
-        self.another_one_for_screener_login()
-        sleep_time = 0.9
-        time.sleep(sleep_time)
-        self.driver.find_element(By.CSS_SELECTOR, ".js-filter-sets").click()
-        time.sleep(sleep_time)
-        element = self.driver.find_element(By.XPATH, '//div[@data-set="2806115"]')
-        element.click()
-        time.sleep(sleep_time)
-        self.driver.find_element(By.XPATH, '//div[@data-set="816438"]').click()
-        self.driver.find_element(By.XPATH, '//div[@title="Time Interval"]').click()
-        self.driver.find_element(By.XPATH, f'//div[@title="{time_frame}"]').click()
-        self.driver.find_element(By.XPATH, '//div[@title="Export screener data to a CSV file"]').click()
-        return self.driver
+        try:
+            self.another_one_for_screener_login()
+            sleep_time = 0.9
+            time.sleep(sleep_time)
+            self.driver.find_element(By.CSS_SELECTOR, ".js-filter-sets").click()
+            time.sleep(sleep_time)
+            element = self.driver.find_element(By.XPATH, '//div[@data-set="2806115"]')
+            element.click()
+            time.sleep(sleep_time)
+            self.driver.find_element(By.XPATH, '//div[@data-set="816438"]').click()
+            self.driver.find_element(By.XPATH, '//div[@title="Time Interval"]').click()
+            self.driver.find_element(By.XPATH, f'//div[@title="{time_frame}"]').click()
+            self.driver.find_element(By.XPATH, '//div[@title="Export screener data to a CSV file"]').click()
+            return self.driver
+        except:
+            print('Something went wrong download_relative_volume_trends')
+            self.logout()
 
     def download_csv_file_and_set_alerts_volume_15m(self):
         self.download_relative_volume_trends()
         time.sleep(1)
-        self.driver.quit()
+        self.logout()
         df = pd.read_csv(self.csv_file_name_volume_15m)
         df = df[(df['Ticker'].str.endswith('USDT', na=False))]
         df = df[(df['Moving Averages Rating'] == 'Strong Buy')]
@@ -160,12 +172,37 @@ class LoginOnly:
         print(email_message_list)
         return email_message_list
 
+    def logout_security(self):
+        time.sleep(3)
+        self.driver.get('https://www.tradingview.com/u/ramentwickler/#security')
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        element = self.driver.find_element(By.CSS_SELECTOR, '.logOugText-4Woub5Gy')
+        self.driver.execute_script("arguments[0].click();", element)
+        # time.sleep(2)
+        # element.click()
 
-# lg = LoginOnly()
+    def logout(self):
+        try:
+            time.sleep(2)
+            element = self.driver.find_element(By.CSS_SELECTOR, '.tv-header__user-menu-button--logged')
+            time.sleep(2)
+            element.click()
+            time.sleep(0.5)
+            element = self.driver.find_element(By.XPATH, '//div[@data-name="header-user-menu-sign-out"]')
+            element.click()
+            time.sleep(0.5)
+            self.driver.quit()
+        except:
+            print('Something went wrong logout')
+            self.driver.quit()
+
+
+lg = LoginOnly()
 # print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()
 # lg.another_one_for_screener_login()
 # lg.download_tv_trend_csv()
 # lg.download_oscillators_csv()
 # lg.download_relative_volume_trends()
-# lg.download_csv_file_and_set_alerts_volume_15m()
+lg.download_csv_file_and_set_alerts_volume_15m()
