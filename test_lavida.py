@@ -198,11 +198,11 @@ class LoginOnly:
             self.driver.quit()
 
 
-lg = LoginOnly()
+# lg = LoginOnly()
 # print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()
 # lg.another_one_for_screener_login()
 # lg.download_tv_trend_csv()
 # lg.download_oscillators_csv()
 # lg.download_relative_volume_trends()
-lg.download_csv_file_and_set_alerts_volume_15m()
+# lg.download_csv_file_and_set_alerts_volume_15m()
