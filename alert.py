@@ -18,14 +18,15 @@ async def root():
 
 
 @app.get("/csv")
-async def root(background_tasks: BackgroundTasks):
+async def root(background_tasks: BackgroundTasks, time_frame: Optional[str] = "15 minutes"):
+    print(time_frame)
     start = time.time()
     csv_import = LoginOnly()
-    email_message_list = csv_import.download_csv_file_and_set_alerts_volume_15m()
+    email_message_list = csv_import.download_csv_file_and_set_alerts_volume(time_frame)
     request_time = time.time() - start
     email_sent = None
     if len(email_message_list) > 0:
-        send_email_background(background_tasks, '15 minutes', 'phpwebentwickler@gmail.com', email_message_list)
+        send_email_background(background_tasks, time_frame, 'phpwebentwickler@gmail.com', email_message_list)
         email_sent = True
     return {"message": f"CSV has been imported. Time {request_time} email sent={email_sent}"}
 
@@ -47,8 +48,15 @@ async def get_scheduled_syncs():
 #     return {"Scheduled": True, "JobID": scheduled_job.id}
 
 @app.get("/start_schedule/{job_id}", tags=["schedule"])
-async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 20):
+async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 50):
     scheduled_job = Schedule.add_job(download_volume_15m, 'interval', [request], seconds=interval, id=job_id)
+    return {"Scheduled": True, "JobID": scheduled_job.id}
+
+
+@app.get("/start_schedule/download_volume_5m", tags=["schedule"])
+async def scheduled_task_start(job_id: str, request: Request, interval: Optional[int] = 20):
+    scheduled_job = Schedule.add_job(download_volume_5m, 'interval', [request], seconds=interval,
+                                     id="download_volume_5m")
     return {"Scheduled": True, "JobID": scheduled_job.id}
 
 
@@ -64,6 +72,14 @@ def download_volume_15m(request: Request):
     endpoint = str(base_url) + 'csv'
     if get_settings().env != 'dev':
         endpoint = "https://csvfastapi.mamacita-fashion.com/app/csv"
+    r = requests.get(endpoint)
+
+
+def download_volume_5m(request: Request):
+    base_url = request.base_url
+    endpoint = str(base_url) + 'csv?time_frame=\"5 minutes\"'
+    if get_settings().env != 'dev':
+        endpoint = 'https://csvfastapi.mamacita-fashion.com/app/csv?time_frame=\"5 minutes\"'
     r = requests.get(endpoint)
 
 

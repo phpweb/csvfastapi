@@ -5,6 +5,11 @@ Accept: application/json
 
 ###
 
+GET http://127.0.0.1:8000/csv?time_frame="5 minutes"
+Accept: application/json
+
+###
+
 GET http://127.0.0.1:8000/hasan
 Accept: application/json
 
@@ -22,6 +27,12 @@ Accept: application/json
 
 GET http://127.0.0.1:8000/start_schedule/download_volume_15m
 Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/start_schedule/download_volume_5m
+Accept: application/json
+
 
 ###
 

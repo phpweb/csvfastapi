@@ -118,7 +118,7 @@ class LoginOnly:
     def download_relative_volume_trends(self, time_frame='15 minutes'):
         try:
             self.another_one_for_screener_login()
-            sleep_time = 0.9
+            sleep_time = 1
             time.sleep(sleep_time)
             self.driver.find_element(By.CSS_SELECTOR, ".js-filter-sets").click()
             time.sleep(sleep_time)
@@ -134,13 +134,15 @@ class LoginOnly:
             print('Something went wrong download_relative_volume_trends')
             self.logout()
 
-    def download_csv_file_and_set_alerts_volume_15m(self):
-        self.download_relative_volume_trends()
+    def download_csv_file_and_set_alerts_volume(self, time_frame='15 minutes'):
+        self.download_relative_volume_trends(time_frame)
         time.sleep(1)
         self.logout()
+        time.sleep(3)
         df = pd.read_csv(self.csv_file_name_volume_15m)
         df = df[(df['Ticker'].str.endswith('USDT', na=False))]
         df = df[(df['Moving Averages Rating'] == 'Strong Buy')]
+        # print(df)
         email_message_list = []
         if len(df['Ticker']) > 0:
             for ticker in df['Ticker']:
@@ -205,4 +207,9 @@ class LoginOnly:
 # lg.download_tv_trend_csv()
 # lg.download_oscillators_csv()
 # lg.download_relative_volume_trends()
-# lg.download_csv_file_and_set_alerts_volume_15m()
+# 15 minutes
+# lg.download_csv_file_and_set_alerts_volume()
+
+# 5 minutes
+# lg.download_csv_file_and_set_alerts_volume("5 minutes")
+
