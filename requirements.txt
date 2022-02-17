@@ -12,3 +12,4 @@ pydantic
 requests
 fastapi-mail
 fastapi_utils
+pandas_ta

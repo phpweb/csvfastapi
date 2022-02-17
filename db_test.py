@@ -11,5 +11,5 @@ db.add(tv_signal)
 db.commit()
 
 # symbol = TvScreenerSignals.query.filter_by(symbol='BNB').first()
-symbol = db.query(TvScreenerSignals).filter_by(symbol='HAS').first()
+symbol = db.query(TvScreenerSignals).filter_by(symbol='BNB').first()
 print(symbol.symbol)

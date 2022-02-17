@@ -5,6 +5,8 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from config import get_settings
 from database import SessionLocal, engine
 from models import TvScreenerSignals, Base
@@ -36,7 +38,6 @@ class LoginOnly:
         self.chrome_options.add_experimental_option("prefs", preferences)
 
         self.driver = webdriver.Chrome(service=service, options=self.chrome_options)
-
         self.vars = {}
         self.screener_login_url = "https://www.tradingview.com/crypto-screener/#signin"
         self.general_login_url = "https://www.tradingview.com/"
@@ -67,8 +68,14 @@ class LoginOnly:
         self.driver.set_window_size(1920, 1057)
         self.driver.find_element(By.CSS_SELECTOR, ".tv-signin-dialog").click()
         self.driver.find_element(By.CSS_SELECTOR, ".js-show-email").click()
-        self.driver.find_element(By.NAME, 'username').send_keys(self.tv_username)
-        self.driver.find_element(By.NAME, 'password').send_keys(self.tv_password)
+        element = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.NAME, "username")))
+        element.send_keys(self.tv_username)
+        element = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.NAME, "password")))
+        element.send_keys(self.tv_password)
+        # self.driver.find_element(By.NAME, 'username').send_keys(self.tv_username)
+        # self.driver.find_element(By.NAME, 'password').send_keys(self.tv_password)
         self.driver.find_element(By.CSS_SELECTOR, '.tv-button__loader').click()
         return self.driver
 
@@ -102,40 +109,26 @@ class LoginOnly:
 
     def download_relative_volume_trends(self, time_frame='15 minutes'):
         self.another_one_for_screener_login()
-        sleep_time = 0.5
+        sleep_time = 0.9
         time.sleep(sleep_time)
-        element = self.driver.find_element(By.XPATH, '//div[@title="Screens"]')
-        element.click()
-        # element = self.driver.find_element(By.XPATH, '//span[text()="VolumeFxCanli"]')
+        self.driver.find_element(By.CSS_SELECTOR, ".js-filter-sets").click()
+        time.sleep(sleep_time)
         element = self.driver.find_element(By.XPATH, '//div[@data-set="2806115"]')
         element.click()
         time.sleep(sleep_time)
-        # element = self.driver.find_element(By.XPATH, '//div[text()="VolumeFxCanli"]')
-        element = self.driver.find_element(By.XPATH, '//div[@data-set="816438"]')
-        time.sleep(sleep_time)
-        element.click()
-        time.sleep(sleep_time)
-        element = self.driver.find_element(By.XPATH, '//div[@title="Time Interval"]')
-        time.sleep(sleep_time)
-        element.click()
-        time.sleep(sleep_time)
-        element = self.driver.find_element(By.XPATH, f'//div[@title="{time_frame}"]')
-        time.sleep(sleep_time)
-        element.click()
-        # time.sleep(sleep_time)
-        element = self.driver.find_element(By.XPATH, '//div[@title="Export screener data to a CSV file"]')
-        # time.sleep(sleep_time)
-        element.click()
+        self.driver.find_element(By.XPATH, '//div[@data-set="816438"]').click()
+        self.driver.find_element(By.XPATH, '//div[@title="Time Interval"]').click()
+        self.driver.find_element(By.XPATH, f'//div[@title="{time_frame}"]').click()
+        self.driver.find_element(By.XPATH, '//div[@title="Export screener data to a CSV file"]').click()
         return self.driver
 
     def download_csv_file_and_set_alerts_volume_15m(self):
         self.download_relative_volume_trends()
-        time.sleep(2)
+        time.sleep(1)
         self.driver.quit()
         df = pd.read_csv(self.csv_file_name_volume_15m)
         df = df[(df['Ticker'].str.endswith('USDT', na=False))]
         df = df[(df['Moving Averages Rating'] == 'Strong Buy')]
-        print(df)
         email_message_list = []
         if len(df['Ticker']) > 0:
             for ticker in df['Ticker']:
@@ -166,6 +159,8 @@ class LoginOnly:
         print('Email message')
         print(email_message_list)
         return email_message_list
+
+
 # lg = LoginOnly()
 # print(lg.tv_trend_csv_download_path)
 # lg.test_lavida()

@@ -61,8 +61,6 @@ async def scheduled_task_start(job_id: str, request: Request, interval: Optional
 
 def download_volume_15m(request: Request):
     base_url = request.base_url
-    print('base url')
-    print(base_url)
     endpoint = str(base_url) + 'csv'
     if get_settings().env != 'dev':
         endpoint = "https://csvfastapi.mamacita-fashion.com/app/csv"
@@ -73,3 +71,10 @@ def download_volume_15m(request: Request):
 async def remove_scheduled_job(job_id: str):
     Schedule.remove_job(job_id)
     return {"Scheduled": False, "JobID": job_id}
+
+
+@app.get("/while/{interval}")
+async def root(interval: int):
+    while True:
+        if interval == 3:
+            print('it is 3')
