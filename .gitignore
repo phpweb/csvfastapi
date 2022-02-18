@@ -7,3 +7,4 @@ PID_FILE
 .idea/*
 chromedriver
 sql_app.db
+TvSignals.db

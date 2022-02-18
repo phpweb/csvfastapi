@@ -29,7 +29,7 @@ jobs:
                 kill $(cat PID_FILE)
                 rm PID_FILE
             fi
-            gunicorn -c gunicorn.py alert:app -w 4 -k uvicorn.workers.UvicornWorker --pid PID_FILE --log-file app.log &
+            gunicorn -c gunicorn.py tv_signals:app -w 4 -k uvicorn.workers.UvicornWorker --pid PID_FILE --log-file app.log &
 #            chmod +x ./post_deployment_actions.sh
 #            sh ./post_deployment_actions.sh test
           host: ${{ secrets.SSH_HOST }}
