@@ -15,3 +15,21 @@ Content-Type: application/json
 }
 
 ###
+
+POST https://csvfastapi.mamacita-fashion.com/app/tv_signals
+Content-Type: application/json
+
+{
+  "symbol": "COCOSUSDT",
+  "tv_price": "1.377",
+  "rsi": "32.35",
+  "tsi": "-31.91",
+  "adx": "42.2",
+  "rvol": "4.84",
+  "supertrend": "Down",
+  "timeframe": "1",
+  "side": "buy",
+  "alert_algo": "rvol"
+}
+
+###
