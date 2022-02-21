@@ -1,24 +1,16 @@
 <html>
 <body style="margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif;">
 <div style="width: 100%; background: #efefef; border-radius: 10px; padding: 10px;">
-  <div style="margin: 0 auto; width: 90%; text-align: center;">
-    <h1 style="background-color: rgba(0, 53, 102, 1); padding: 5px 10px; border-radius: 5px; color: white;">15 Minutes</h1>
-    <div style="margin: 30px auto; background: white; width: 40%; border-radius: 10px; padding: 50px; text-align: center;">
-      {% for symbol in body %}
-        {% if symbol.how_many == 0 %}
-          <h3 style="font-size: 24px; background: blue;">New</h3><br/>
-          <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
-          Current price: {{ symbol.current_price }}<br/>
-        {% else %}
-          <h3 style="font-size: 24px; background: gray;">Old</h3><br/>
-          <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
-          Current price: {{ symbol.current_price }}<br/>
-          How many today: {{ symbol.how_many }}<br/>
-          Last percent change: {{ symbol.percent }}<br/>
-        {% endif %}
-      {% endfor %}
+    <div style="margin: 0 auto; width: 90%; text-align: center;">
+        <div style="margin: 30px auto; background: white; width: 40%; border-radius: 10px; padding: 50px; text-align: center;">
+            {% for symbol in body %}
+            <h1 style="background-color: rgba(0, 53, 102, 1); padding: 5px 10px; border-radius: 5px; color: white;">{{ symbol.current_timeframe }} minutes</h1>
+            <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
+            Current time frame: {{ symbol.current_timeframe }}<br/>
+            Previous time frame: {{ symbol.previous_timeframe }}<br/>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

@@ -13,11 +13,19 @@ for symbol in symbols:
     symbol = symbol['symbol']
     symbols_data.append(symbol)
 df = pd.DataFrame(symbols_data)
-df = df[~df.stack().str.contains('UP|DOWN|TUSD|BULL|BEAR').groupby(level=0).any()]
+reg_ex = 'UP|DOWN|TUSD|BULL|' \
+         'BEAR|BCCUSDT|VENUSDT|' \
+         'BCHABCUSDT|BCHSVUSDT|PAXUSDT|' \
+         'USDCUSDT|NANOUSDT|USDSBUSDT|ERDUSDT|' \
+         'NPXSUSDT|STORMUSDT|HCUSDT|MCOUSDT|XZCUSDT|LENDUSDT|' \
+         'BKRWUSDT|DAIUSDT|USDCUSDT'
+df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
 df.to_csv(path, mode='w', header=False, index=False)
 print('before write')
 print(len(df))
 read_csv = pd.read_csv(path, header=None)
 print('after read csv')
 print(len(read_csv))
+total = len(read_csv)
+max_item = total / 40
 

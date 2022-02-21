@@ -18,6 +18,7 @@ conf = ConnectionConfig(
 
 
 def send_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: dict):
+    body = [body]
     message = MessageSchema(
         subject=subject,
         recipients=[email_to],
@@ -31,6 +32,7 @@ def send_email_background(background_tasks: BackgroundTasks, subject: str, email
 
 
 async def send_simple_email(subject: str, email_to: str, body: dict):
+    body = [body]
     message = MessageSchema(
         subject=subject,
         recipients=[email_to],
