@@ -7,7 +7,9 @@ url = requests.get("https://api.binance.com/api/v3/exchangeInfo")
 text = url.text
 
 data = json.loads(text)
-symbols = [x for x in data['symbols'] if x['symbol'].endswith('BUSD')]
+symbols = [x for x in data['symbols'] if x['symbol'].endswith('BUSD') and x['status'] == 'TRADING']
+# symbols = [x for x in symbols['symbols'] if x['status'] == 'TRADING']
+
 symbols_data = []
 for symbol in symbols:
     symbol = symbol['symbol']
