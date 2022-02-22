@@ -13,3 +13,9 @@ requests
 fastapi-mail
 fastapi_utils
 pandas_ta
+asyncio
+tqdm
+ccxt
+python-binance
+binance-connector
+aiohttp
