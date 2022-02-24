@@ -9,7 +9,7 @@ Content-Type: application/json
   "adx": "42.2",
   "rvol": "4.84",
   "supertrend": "Down",
-  "timeframe": "5",
+  "timeframe": "15",
   "side": "buy",
   "alert_algo": "rvol"
 }

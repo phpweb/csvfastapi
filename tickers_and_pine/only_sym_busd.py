@@ -1,8 +1,9 @@
+import os
 import requests
 import json
 import pandas as pd
-
-path = 'all_busd.csv'
+project_path = os.path.dirname(__file__) + '/'
+path = project_path + 'all_busd.csv'
 url = requests.get("https://api.binance.com/api/v3/exchangeInfo")
 text = url.text
 

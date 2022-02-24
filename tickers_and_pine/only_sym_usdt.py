@@ -1,8 +1,9 @@
+import os
 import requests
 import json
 import pandas as pd
-
-path = 'all_usdt.csv'
+project_path = os.path.dirname(__file__) + '/'
+path = project_path + 'all_usdt.csv'
 url = requests.get("https://api.binance.com/api/v3/exchangeInfo")
 text = url.text
 
@@ -13,13 +14,8 @@ for symbol in symbols:
     symbol = symbol['symbol']
     symbols_data.append(symbol)
 df = pd.DataFrame(symbols_data)
-reg_ex = 'UP|DOWN|TUSD|BULL|' \
-         'BEAR|BCCUSDT|VENUSDT|' \
-         'BCHABCUSDT|BCHSVUSDT|PAXUSDT|' \
-         'USDCUSDT|NANOUSDT|USDSBUSDT|ERDUSDT|' \
-         'NPXSUSDT|STORMUSDT|HCUSDT|MCOUSDT|XZCUSDT|LENDUSDT|' \
-         'BKRWUSDT|DAIUSDT|USDCUSDT'
-df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
+# reg_ex = 'UP|DOWN|TUSD|BULL|BEAR'
+# df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
 df.to_csv(path, mode='w', header=False, index=False)
 print('before write')
 print(len(df))

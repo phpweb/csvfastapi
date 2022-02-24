@@ -4,10 +4,8 @@
     <div style="margin: 0 auto; width: 90%; text-align: center;">
         <div style="margin: 30px auto; background: white; width: 40%; border-radius: 10px; padding: 50px; text-align: center;">
             {% for symbol in body %}
-            <h1 style="background-color: rgba(0, 53, 102, 1); padding: 5px 10px; border-radius: 5px; color: white;">{{ symbol.current_timeframe }} minutes</h1>
-            <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
-            Current time frame: {{ symbol.current_timeframe }}<br/>
-            Previous time frame: {{ symbol.previous_timeframe }}<br/>
+                <h1 style="background-color: rgba(0, 53, 102, 1); padding: 5px 10px; border-radius: 5px; color: white;">{{ symbol.current_timeframe }} minutes</h1>
+                <h2 style="font-size: 24px;">Symbol: {{ symbol.symbol }}</h2><br/>
             {% endfor %}
         </div>
     </div>
