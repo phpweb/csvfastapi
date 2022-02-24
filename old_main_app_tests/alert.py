@@ -2,8 +2,8 @@ import time
 import requests
 from typing import Optional
 from fastapi import FastAPI, BackgroundTasks, Request
-from test_lavida import LoginOnly
-from send_email import send_email_background, send_simple_email
+from selenium_tests.test_lavida import LoginOnly
+from send_email import send_email_background
 from apscheduler.schedulers.background import BackgroundScheduler
 from config import get_settings
 

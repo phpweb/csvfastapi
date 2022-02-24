@@ -8,8 +8,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config import get_settings
-from database import SessionLocal, engine
-from models import TvScreenerSignals, Base
+from sqlite_tests.database import SessionLocal, engine
+from sqlite_tests.models import TvScreenerSignals, Base
 import utils as utils
 
 db = SessionLocal()
