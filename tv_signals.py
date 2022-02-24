@@ -2,7 +2,7 @@ import datetime as dt
 from fastapi import FastAPI, BackgroundTasks, Request
 import pandas as pd
 from sqlalchemy import create_engine
-from email.send_email import send_email_background
+from email_transactions.send_email import send_email_background
 
 engine = create_engine('sqlite:///TvSignals.db', connect_args={"check_same_thread": False})
 
