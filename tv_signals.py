@@ -19,3 +19,16 @@ async def root(request: Request, background_tasks: BackgroundTasks):
     entry = long.check_notification(df, background_tasks)
     df.to_sql("tv_signals_all", engine, index=False, if_exists='append')
     return {"json_data": json_data, "saved_db": True, "entry": entry}
+
+
+@app.post("/luna")
+async def luna(request: Request, background_tasks: BackgroundTasks):
+    json_data = await request.json()
+    df = pd.DataFrame([json_data])
+    df['date'] = dt.datetime.utcnow()
+    symbol = df['symbol'].values[0]
+    side = df['symbol'].values['side']
+    df['position'] = 0
+    df.to_sql("active_trades", engine, index=False, if_exists='append')
+    return {"all": "is fine", "symbol": symbol, "order": order}
+

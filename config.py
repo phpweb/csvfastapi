@@ -1,5 +1,5 @@
 from functools import lru_cache
-from pydantic import BaseSettings
+from pydantic import BaseSettings, BaseModel
 
 
 class Settings(BaseSettings):
@@ -10,14 +10,50 @@ class Settings(BaseSettings):
     mail_username: str
     mail_password: str
     mail_from: str
+    mail_from_name: str
     mail_port: int
     mail_server: str
-    mail_from_name: str
+    api_key: str
+    api_secret: str
 
     class Config:
         env_file = ".env"
 
 
+class LogConfig(BaseModel):
+    """Logging configuration to be set for the server"""
+
+    LOGGER_NAME: str = "csvfastapi"
+    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
+    LOG_LEVEL: str = "DEBUG"
+
+    # Logging config
+    version = 1
+    disable_existing_loggers = False
+    formatters = {
+        "default": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    }
+    handlers = {
+        "default": {
+            "formatter": "default",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        },
+    }
+    loggers = {
+        "csvfastapi": {"handlers": ["default"], "level": LOG_LEVEL},
+    }
+
+
 @lru_cache()
 def get_settings():
     return Settings()
+
+
+@lru_cache()
+def get_log_config():
+    return LogConfig()

@@ -1,4 +1,4 @@
-fastapi
+fastapi==0.75.0
 uvicorn[standard]
 gunicorn
 pandas
@@ -6,7 +6,7 @@ selenium
 websocket-client
 sqlalchemy
 APScheduler
-unicorn_binance_websocket_api
+unicorn_binance_websocket_api==1.38.0
 python-dotenv
 pydantic
 requests

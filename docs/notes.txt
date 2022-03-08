@@ -1,0 +1,99 @@
+Unversioned symlinks `python`, `python-config`, `pip` etc. pointing to
+`python3`, `python3-config`, `pip3` etc., respectively, have been installed into
+  /opt/homebrew/opt/python@3.10/libexec/bin
+
+You can install Python packages with
+  /opt/homebrew/opt/python@3.10/bin/pip3 install <package>
+They will install into the site-package directory
+  /opt/homebrew/lib/python3.10/site-packages
+
+tkinter is no longer included with this formula, but it is available separately:
+  brew install python-tk@3.10
+
+See: https://docs.brew.sh/Homebrew-and-Python
+
+python@3.10 is keg-only, which means it was not symlinked into /opt/homebrew,
+because this is an alternate version of another formula.
+
+If you need to have python@3.10 first in your PATH, run:
+  echo 'export PATH="/opt/homebrew/opt/python@3.10/bin:$PATH"' >> ~/.zshrc
+
+For compilers to find python@3.10 you may need to set:
+  export LDFLAGS="-L/opt/homebrew/opt/python@3.10/lib"
+
+270988
+
+46819168654
+
+C5HTGYM69
+256240
+
+2806115
+
+CHROME_DRIVER_PATH="/var/www/vhosts/mamacita-fashion.com/csvfastapi.mamacita-fashion.com/chromedriverlinux"
+
+gunicorn -c gunicorn.py alert:app -w 4 -k uvicorn.workers.UvicornWorker --pid PID_FILE --log-file app.log --preload &
+
+J. Welles Wilder
+Relative Strength Index
+Average True Range (ATR)
+Parabolic SAR
+Average Directional Index (It takes the very complex subject of trend strength and direction and calculates it down into a very simple and straightforward visual)
+Directional Moving Index (ADX: Wilder believed that a DMI reading above 25 indicated a strong trend, while a reading below 20 indicated a weak or non-existent trend)
+
+---
+TSI(True Strength Index): It does this by indicating potential trends and trend changes through crossovers while fluctuating between positive and negative territory. Positive refers to buyers being in more control and negative refers to sellers being in more control. Additionally, if the indicator diverges from price, it may be a signal that the price trend is weak and/or weakening further and may reverse direction in the near future. If divergence lasts too long, it can end up providing little insight into when a reversal will actually occur in a trend. Additionally, divergence is not always present when price is noticeably reversing.
+https://www.tradingview.com/ideas/directionalmovement/?solution=43000592290
+
+
+---
+OCO (instead of SL!!!, maybe then it will be done)
+
+---
+Multiple MA Rating (should be considered)
+Ask and Bid price can be SL&TP
+
+Todos
+1- Best performing (will be done later if necessary).
+2- Percent change in corresponding time frame. (we will see if we need it)
+3- Saving the data in sql. (this will be done first and we will see if we need websocket data in the future)
+  3-1: Prepare an excel sheet to see how the data will look like at the end before preparing json string.
+  3-2: Prepare json string to send over webhook and look for a library for this. Be careful busd pairs should be sent over webhook only.
+  3-3: Benchmark realt-time scan and tv signal seconds. Which one is faster?
+4- v5 new things: https://www.tradingview.com/blog/en/say-hello-to-pine-script-v5-26900/
+5- Library log.
+
+
+Brainstorming
+----
+Hedef ve en önemli nokta günde %10 yapmak, nasil yaptiginin hic önemi yok!
+Sinyali tv den aldin, botla DMI yi es zamanli calistir DMI verisine göre islemde kal veya islemden cik.
+Her zaman try-catch kullan
+
+En önemli noktalar
+-----
+1- Giris
+  1-1: Ne zaman gireceksin?
+    1-1-1: 1-3-5 sistemi dogru mu?
+    1-1-2: 3-15 sistemi mi dogru?
+  1-2: Hangisine gireceksin?
+2- Cikis
+
+1-1-1: 1-3-5 sistemi dogru mu?
+Düsünceler: 
+* TSI artida olmasi lazim, ve ADX minimum 25 olmasi lazim. (en az 5dk da izlemim bu)
+* TSI ekside olsada eger mavi cizgi kirmizi cizginin üstündeyse al!!!
+* TSI artiya gectigi an al ve ADX (trend güclülügüne) e göre takip et.
+* O gün yükselenler genelde 3,5 ve 15 de hep TSI, ADX ve rvol artida!!!
+* Rvol trigger yapiyor ve hemen ardindan tsi triger yapiyor??? Bi diger trigger sadece SUperTrend olsa nasil olur? Efe library ile cok dogru bir yoldasin, bu tür bilgileri tek bi merkezden kontrol etmek icin
+* ADX 25'in üstündeyse ve TSI artidaysa, bu trende kal veya gözlemle!!!!
+* Supertrend 10 saatten (15dk da) beri up sa buna bir bak, scanner olustur.
+* BB ve BB %B ve BBW cok yardimci olabilir. Yukari gidislerde breakouts (BB %B) alim firsatlari oluyor. 
+* BB ye göre satis sinyal fonksiyonlarini da ayarla, en azindan satis istatistikleri icin simdilik.
+* son bir dakika da artislar ve artisin hizini ölc, 3 dakika da sürekli artan grafik ve ne hizlilikla arttigini gösteren fonksiyon ve 5 dakika da sürekli artak grafik ve hizliligini ölcen formulu bul. Bu pumplari bulmada en cok isimize yarayan olabiliri. 
+* DMI sanki bin önceki noktayi yapiyor gibi. DMI ile ilgili bir strateji olustur. (https://www.tradingview.com/support/solutions/43000502250-directional-movement-dmi/)
+* TSI ile ilgili de bir indikatör var, TSI en alttan alimlarda ve tepeden satimlarda cok yardimci olabilir. Bununla ilgili bir indikatör var onu strateji ye cevir. 
+* Parabolic SAR i incele!!!
+* Suna da bir bak.
+* Heikin Ashi buy/sell icin de bir strateji ve scanner olustur.
+* LSM ve BB %B tekrar bir daha dene, RVOL u hesaba kat, 
