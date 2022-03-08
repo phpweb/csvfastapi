@@ -102,6 +102,7 @@ hasta = get_price_filter_tick_size('LUNABUSD')
 print(get_price_filter_tick_size.cache_info())
 # request_time = time.time() - start
 # test
+# another test
 # print(f'NO asyncio time spent = {request_time}')
 print(f())
 print(f.cache_info())
