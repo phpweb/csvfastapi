@@ -84,7 +84,7 @@ def create_order(symbol, side, quantity, order_type, price):
                                          price=price,
                                          recvWindow=recv_window)
     except BinanceAPIException as e:
-        logger.error(e)
+        logger.error(f'{side} with {symbol}: ' + e.message)
         print(e)
     else:
         return order_send
@@ -174,7 +174,7 @@ def cancel_order(symbol, order_id):
 # print(f'Second call asyncio time spent = {request_time}')
 
 
-prepare_order('LUNABUSD', 'sell')
+# prepare_order('LUNABUSD', 'sell')
 # order_filled = is_order_filled('LUNABUSD', 458282764)
 # print(order_filled)
 # if order_filled is False:

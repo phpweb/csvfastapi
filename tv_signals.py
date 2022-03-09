@@ -34,7 +34,8 @@ async def luna(request: Request, background_tasks: BackgroundTasks):
     df = pd.DataFrame([json_data])
     df['date'] = dt.datetime.utcnow()
     symbol = df['symbol'].values[0]
-    side = df['symbol'].values['side']
+    side = df['side'].values[0]
+    bn.prepare_order(symbol, side)
     df['position'] = 0
     df.to_sql("active_trades", engine, index=False, if_exists='append')
     return {"all": "is fine", "symbol": symbol}
