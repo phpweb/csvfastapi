@@ -25,5 +25,8 @@ smtp_handler.setLevel(logging.ERROR)
 # smtp_handler.setFormatter(smtp_formatter)
 # queue_listener = logging.handlers.QueueListener(logging_queue, smtp_handler)
 # queue_listener.start()
+file_handler = logging.handlers.RotatingFileHandler('api.log', maxBytes=10485760, backupCount=300, encoding='utf-8')
+
 logger.addHandler(smtp_handler)
+logger.addHandler(file_handler)
 

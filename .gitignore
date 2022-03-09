@@ -8,3 +8,4 @@ PID_FILE
 chromedriver
 sql_app.db
 TvSignals.db
+api.log

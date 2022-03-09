@@ -85,7 +85,6 @@ def create_order(symbol, side, quantity, order_type, price):
                                          recvWindow=recv_window)
     except BinanceAPIException as e:
         logger.error(f'{side} with {symbol}: ' + e.message)
-        print(e)
     else:
         return order_send
 

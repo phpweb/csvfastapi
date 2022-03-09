@@ -17,7 +17,7 @@ Content-Type: application/json
    "symbol":"LUNABUSD",
    "tv_price":"82.77",
    "timeframe":"S",
-   "side":"buy",
+   "side":"sell",
    "alert_algo":"heikin_benimki"
 }
 

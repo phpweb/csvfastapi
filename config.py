@@ -43,9 +43,17 @@ class LogConfig(BaseModel):
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stderr",
         },
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "default",
+            "filename": "api.log",
+            "maxBytes": 1024,
+            "backupCount": 3,
+            "encoding": 'utf-8',
+        },
     }
     loggers = {
-        "csvfastapi": {"handlers": ["default"], "level": LOG_LEVEL},
+        "csvfastapi": {"handlers": ["default", "file"], "level": LOG_LEVEL},
     }
 
 
