@@ -24,7 +24,7 @@ class LogConfig(BaseModel):
     """Logging configuration to be set for the server"""
 
     LOGGER_NAME: str = "csvfastapi"
-    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | %(message)s"
+    LOG_FORMAT: str = "%(levelprefix)s | %(asctime)s | [%(filename)s:%(lineno)d] | %(message)s"
     LOG_LEVEL: str = "DEBUG"
 
     # Logging config
@@ -34,7 +34,7 @@ class LogConfig(BaseModel):
         "default": {
             "()": "uvicorn.logging.DefaultFormatter",
             "fmt": LOG_FORMAT,
-            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "datefmt": "%d-%m-%Y %H:%M:%S",
         },
     }
     handlers = {

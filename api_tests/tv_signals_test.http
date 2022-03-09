@@ -45,3 +45,14 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://127.0.0.1:8000/cache_test
+Content-Type: application/json
+
+{
+   "symbol":"BNBBUSD",
+   "tv_price":"82.77",
+   "timeframe":"S",
+   "side":"sell",
+   "alert_algo":"heikin_benimki"
+}
