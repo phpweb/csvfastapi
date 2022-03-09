@@ -12,6 +12,11 @@ engine = create_engine('sqlite:///TvSignals.db', connect_args={"check_same_threa
 app = FastAPI()
 
 
+@app.get("/")
+async def home():
+    return {"it_is": "working."}
+
+
 @app.post("/tv_signals")
 async def root(request: Request, background_tasks: BackgroundTasks):
     json_data = await request.json()
@@ -33,17 +38,3 @@ async def luna(request: Request, background_tasks: BackgroundTasks):
     df['position'] = 0
     df.to_sql("active_trades", engine, index=False, if_exists='append')
     return {"all": "is fine", "symbol": symbol}
-
-
-@app.get("/cache_test")
-async def cache_test(request: Request):
-    json_data = await request.json()
-    df = pd.DataFrame([json_data])
-    df['date'] = dt.datetime.utcnow()
-    symbol = df['symbol'].values[0]
-    start = time.time()
-    sym_info = bn.get_sym_filters(symbol)
-    print(bn.get_sym_filters.cache_info())
-    request_time = time.time() - start
-    print(f'NO asyncio time spent = {request_time}')
-    return {"sym": sym_info}

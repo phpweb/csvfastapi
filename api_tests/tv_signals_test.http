@@ -10,6 +10,18 @@ Content-Type: application/json
 }
 
 ###
+POST https://csvfastapi.mamacita-fashion.com/app/luna
+Content-Type: application/json
+
+{
+   "symbol":"LUNABUSD",
+   "tv_price":"82.77",
+   "timeframe":"S",
+   "side":"buy",
+   "alert_algo":"heikin_benimki"
+}
+
+###
 POST http://127.0.0.1:8000/tv_signals
 Content-Type: application/json
 
