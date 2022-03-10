@@ -31,10 +31,12 @@ def prepare_order(symbol, side):
     if side == 'buy':
         asset_symbol = utils.extract_balance_symbol_from_pair(symbol)
         asset_balance = get_asset_balance(asset_symbol)
+        # print(f'asset balance = {asset_balance} min notional = {min_notional}')
         if float(asset_balance) < float(min_notional):
             logger.error(f'Min notional is too small! {symbol}')
             return {"error": f"Min notional is too small! {symbol}"}
         quantity = calculate_quantity(asset_balance, current_price_with_precision, quantity_step_size)
+        # print(f'quantity {quantity} min quantity {min_quantity}')
         if float(quantity) < float(min_quantity):
             logger.error(f'Minimum quantity is not enough by BUY! {symbol}')
             return {"error": f"Minimum quantity is not enough by BUY! {symbol}"}
@@ -42,12 +44,12 @@ def prepare_order(symbol, side):
     if side == 'sell':
         ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
         symbol_balance = get_asset_balance(ticker_symbol)
+        symbol_balance = float(symbol_balance) - float(quantity_step_size)
         quantity = round_step_size(float(symbol_balance), float(quantity_step_size))
         if float(quantity) < float(min_quantity):
             logger.error(f'Minimum quantity is not enough by SELL! {symbol}')
             return {"error": f"Minimum quantity is not enough by SELL! {symbol}"}
         quantity = round_step_size(float(quantity), float(quantity_step_size))
-        # quantity = quantity - float(quantity_step_size)
         order_side = SIDE_SELL
     order_placed = create_order(symbol, order_side, quantity, ORDER_TYPE_LIMIT, current_price_with_precision)
     if order_placed:
@@ -116,6 +118,9 @@ def get_sym_filters(symbol):
 
 def calculate_quantity(balance, current_price, precision):
     quantity = float(balance) / float(current_price)
+    # print(f'what is quantity oben {quantity}')
+    quantity = quantity - float(precision)
+    # print(f'what is quantity down {quantity}')
     target_quantity = round_step_size(quantity, float(precision))
     # We subtract a little
     return float(target_quantity)
@@ -173,7 +178,7 @@ def cancel_order(symbol, order_id):
 # print(f'Second call asyncio time spent = {request_time}')
 
 
-# prepare_order('LUNABUSD', 'buy')
+# prepare_order('LUNABUSD', 'sell')
 # order_filled = is_order_filled('LUNABUSD', 458282764)
 # print(order_filled)
 # if order_filled is False:
