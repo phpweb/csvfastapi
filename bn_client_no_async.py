@@ -47,7 +47,7 @@ def prepare_order(symbol, side):
             logger.error(f'Minimum quantity is not enough by SELL! {symbol}')
             return {"error": f"Minimum quantity is not enough by SELL! {symbol}"}
         quantity = round_step_size(float(quantity), float(quantity_step_size))
-        quantity = quantity - float(quantity_step_size)
+        # quantity = quantity - float(quantity_step_size)
         order_side = SIDE_SELL
     order_placed = create_order(symbol, order_side, quantity, ORDER_TYPE_LIMIT, current_price_with_precision)
     if order_placed:
