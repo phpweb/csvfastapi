@@ -179,6 +179,7 @@ def cancel_order(symbol, order_id):
 
 
 # prepare_order('LUNABUSD', 'sell')
+# test
 # order_filled = is_order_filled('LUNABUSD', 458282764)
 # print(order_filled)
 # if order_filled is False:
