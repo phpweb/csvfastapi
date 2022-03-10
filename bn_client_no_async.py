@@ -33,12 +33,12 @@ def prepare_order(symbol, side):
         asset_balance = get_asset_balance(asset_symbol)
         # print(f'asset balance = {asset_balance} min notional = {min_notional}')
         if float(asset_balance) < float(min_notional):
-            logger.error(f'Min notional is too small! {symbol}')
+            logger.info(f'Min notional is too small! {symbol}')
             return {"error": f"Min notional is too small! {symbol}"}
         quantity = calculate_quantity(asset_balance, current_price_with_precision, quantity_step_size)
         # print(f'quantity {quantity} min quantity {min_quantity}')
         if float(quantity) < float(min_quantity):
-            logger.error(f'Minimum quantity is not enough by BUY! {symbol}')
+            logger.info(f'Minimum quantity is not enough by BUY! {symbol}')
             return {"error": f"Minimum quantity is not enough by BUY! {symbol}"}
         order_side = SIDE_BUY
     if side == 'sell':
@@ -47,7 +47,7 @@ def prepare_order(symbol, side):
         symbol_balance = float(symbol_balance) - float(quantity_step_size)
         quantity = round_step_size(float(symbol_balance), float(quantity_step_size))
         if float(quantity) < float(min_quantity):
-            logger.error(f'Minimum quantity is not enough by SELL! {symbol}')
+            logger.info(f'Minimum quantity is not enough by SELL! {symbol}')
             return {"error": f"Minimum quantity is not enough by SELL! {symbol}"}
         quantity = round_step_size(float(quantity), float(quantity_step_size))
         order_side = SIDE_SELL
