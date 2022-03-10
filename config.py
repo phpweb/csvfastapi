@@ -47,8 +47,6 @@ class LogConfig(BaseModel):
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "default",
             "filename": "api.log",
-            "maxBytes": 1024,
-            "backupCount": 3,
             "encoding": 'utf-8',
         },
     }
