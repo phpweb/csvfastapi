@@ -84,7 +84,7 @@ def create_order(symbol, side, quantity, order_type, price):
                                          price=price,
                                          recvWindow=recv_window)
     except BinanceAPIException as e:
-        logger.error(f'{side} with {symbol}: ' + e.message)
+        logger.error(f'{side} with {symbol} quantity {quantity}: ' + e.message)
     else:
         return order_send
 
@@ -118,7 +118,7 @@ def calculate_quantity(balance, current_price, precision):
     quantity = float(balance) / float(current_price)
     target_quantity = round_step_size(quantity, float(precision))
     # We subtract a little
-    return float(target_quantity) - float(precision)
+    return float(target_quantity)
 
 
 def get_asset_balance(asset_name=''):
@@ -173,7 +173,7 @@ def cancel_order(symbol, order_id):
 # print(f'Second call asyncio time spent = {request_time}')
 
 
-# prepare_order('LUNABUSD', 'sell')
+# prepare_order('LUNABUSD', 'buy')
 # order_filled = is_order_filled('LUNABUSD', 458282764)
 # print(order_filled)
 # if order_filled is False:
