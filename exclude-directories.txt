@@ -16,3 +16,4 @@ selenium_tests
 sqlite_tests
 tickers_and_pine
 websocket_tests
+venv
