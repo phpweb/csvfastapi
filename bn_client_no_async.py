@@ -18,6 +18,9 @@ client = Client(api_key, api_secret)
 
 def prepare_order(symbol, side):
     sym_filters = get_sym_filters(symbol)
+    if sym_filters is None:
+        print('There is no such a sym.')
+        return {"error": "There is no such a sym."}
     min_quantity = sym_filters['min_quantity']
     min_notional = sym_filters['min_notional']
     quantity_step_size = sym_filters['quantity_step_size']
@@ -25,8 +28,8 @@ def prepare_order(symbol, side):
     current_price = get_current_price(symbol)
 
     # current_price = 65.12232
-    current_price_with_precision = get_price_with_precision(current_price, price_tick_size)
     quantity = 0
+    current_price_with_precision = 0
     order_side = ''
     if side == 'buy':
         asset_symbol = utils.extract_balance_symbol_from_pair(symbol)
@@ -35,6 +38,7 @@ def prepare_order(symbol, side):
         if float(asset_balance) < float(min_notional):
             logger.info(f'Min notional is too small! {symbol}')
             return {"error": f"Min notional is too small! {symbol}"}
+        current_price_with_precision = get_price_with_precision(current_price, price_tick_size)
         quantity = calculate_quantity(asset_balance, current_price_with_precision, quantity_step_size)
         # print(f'quantity {quantity} min quantity {min_quantity}')
         if float(quantity) < float(min_quantity):
@@ -49,8 +53,10 @@ def prepare_order(symbol, side):
         if float(quantity) < float(min_quantity):
             logger.info(f'Minimum quantity is not enough by SELL! {symbol}')
             return {"error": f"Minimum quantity is not enough by SELL! {symbol}"}
+        current_price_with_precision = get_price_with_precision(current_price, price_tick_size)
         quantity = round_step_size(float(quantity), float(quantity_step_size))
         order_side = SIDE_SELL
+    print(f'Current price with precision = {current_price_with_precision}')
     order_placed = create_order(symbol, order_side, quantity, ORDER_TYPE_LIMIT, current_price_with_precision)
     if order_placed:
         if order_placed['status'] == 'FILLED':
@@ -98,22 +104,28 @@ def get_current_price(symbol):
 
 
 def get_price_with_precision(current_price, price_precision):
-    return round_step_size(float(current_price), float(price_precision))
+    price = round_step_size(float(current_price), float(price_precision))
+    # Find the decimal place to format
+    price_precision = str(price_precision)[::-1].find('.')
+    price = "{:.{}f}".format(price, price_precision)
+    return price
 
 
 @lru_cache(maxsize=None)
 def get_sym_filters(symbol):
     pair_info = client.get_symbol_info(symbol)
-    symbol_filters = {}
-    for filters in pair_info["filters"]:
-        if filters["filterType"] == "PRICE_FILTER":
-            symbol_filters['price_tick_size'] = filters["tickSize"].rstrip('0').rstrip('.')
-        if filters["filterType"] == "MIN_NOTIONAL":
-            symbol_filters['min_notional'] = filters["minNotional"].rstrip('0').rstrip('.')
-        if filters["filterType"] == "LOT_SIZE":
-            symbol_filters['min_quantity'] = filters["minQty"].rstrip('0').rstrip('.')
-            symbol_filters['quantity_step_size'] = filters["stepSize"].rstrip('0').rstrip('.')
-    return symbol_filters
+    if pair_info is not None:
+        symbol_filters = {}
+        for filters in pair_info["filters"]:
+            if filters["filterType"] == "PRICE_FILTER":
+                symbol_filters['price_tick_size'] = filters["tickSize"].rstrip('0').rstrip('.')
+            if filters["filterType"] == "MIN_NOTIONAL":
+                symbol_filters['min_notional'] = filters["minNotional"].rstrip('0').rstrip('.')
+            if filters["filterType"] == "LOT_SIZE":
+                symbol_filters['min_quantity'] = filters["minQty"].rstrip('0').rstrip('.')
+                symbol_filters['quantity_step_size'] = filters["stepSize"].rstrip('0').rstrip('.')
+        return symbol_filters
+    return None
 
 
 def calculate_quantity(balance, current_price, precision):
@@ -134,7 +146,6 @@ def get_asset_balance(asset_name=''):
     balance = 0
     if balance_resp['asset'] == balance_symbol:
         balance = balance_resp['free']
-        print(balance_resp['free'])
     return balance
 
 
@@ -178,7 +189,7 @@ def cancel_order(symbol, order_id):
 # print(f'Second call asyncio time spent = {request_time}')
 
 
-# prepare_order('LUNABUSD', 'sell')
+prepare_order('XECBUSD', 'sell')
 # test
 # order_filled = is_order_filled('LUNABUSD', 458282764)
 # print(order_filled)

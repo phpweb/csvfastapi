@@ -17,7 +17,7 @@ jobs:
       - name: Listele dosyalari
         run: ls -la
       - name: Deploy with rsync
-        run: rsync -avz * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENT_ROOT }}
+        run: rsync -avz * --exclude-from='exclude-directories.txt' ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENT_ROOT }}
       - name: Post deployment tasks
         uses: fifsky/ssh-action@master
         with:
