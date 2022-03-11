@@ -5,7 +5,7 @@ venv
 PID_FILE
 .idea
 .idea/*
-chromedriver
+selenium_tests/chromedriver
 sql_app.db
 TvSignals.db
 api.log
