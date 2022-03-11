@@ -9,7 +9,7 @@ Content-Type: application/json
    "alert_algo":"heikin_benimki"
 }
 
-####
+###
 POST https://csvfastapi.mamacita-fashion.com/app/luna
 Content-Type: application/json
 
