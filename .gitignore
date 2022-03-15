@@ -9,3 +9,5 @@ selenium_tests/chromedriver
 sql_app.db
 TvSignals.db
 api.log
+sl_tmp/*.pkl
+sl_tmp/buy_pr/*.pkl
