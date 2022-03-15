@@ -86,7 +86,7 @@ def prepare_sl_order(symbol):
     bn_private.place_stop_loss_order(symbol, quantity, stop_price, price)
 
 
-def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0007):
+def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0002):
     # 0.01 means 1 percent
     # 0.005 means half of 1 percent
     # 0.0001 means 1 out of 1 percent
