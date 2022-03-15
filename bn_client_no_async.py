@@ -56,7 +56,8 @@ def prepare_order(symbol, side):
     order_placed = bn_private.create_order(symbol, order_side, quantity, ORDER_TYPE_LIMIT, current_price_with_precision)
     if order_placed:
         if order_placed['status'] == 'FILLED':
-            print(f'Order {order_side} {symbol} successful.')
+            print(f'Order {order_side} {symbol} successful by first try.')
+            logger.info(f'Order {order_side} {symbol} successful by first try.')
             if side == 'buy':
                 after_buy_actions(order_placed)
         if order_placed['status'] != 'FILLED':
@@ -73,6 +74,7 @@ def prepare_order(symbol, side):
                     prepare_order(symbol, side)
             if order_status is True:
                 print(f'Order {order_side} {symbol} successful after second try.')
+                logger.info(f'Order {order_side} {symbol} successful after second try.')
                 if side == 'buy':
                     after_buy_actions(order_placed)
 
