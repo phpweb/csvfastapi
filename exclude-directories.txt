@@ -5,7 +5,6 @@ bn_connector
 ccxt
 csv
 docs
-email_transactions
 old_main_app_tests
 pandas_ta
 pd_tests
