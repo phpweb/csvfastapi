@@ -3,7 +3,6 @@ api_tests
 asyncio_test
 bn_connector
 ccxt
-conditions
 csv
 docs
 email_transactions
