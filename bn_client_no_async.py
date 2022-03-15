@@ -65,6 +65,10 @@ def prepare_order(symbol, side):
             order_status = bn_private.is_order_filled(symbol, order_id)
             if order_status is False:
                 terminate_order = bn_private.cancel_order(symbol, order_id)
+                if terminate_order == 'Unknown order sent.' and side == 'buy':
+                    # That means order has been already filled.
+                    after_buy_actions(order_placed)
+                    return True
                 if terminate_order:
                     prepare_order(symbol, side)
             if order_status is True:

@@ -42,9 +42,10 @@ def cancel_order(symbol, order_id):
     try:
         canceled_order = client.cancel_order(symbol=symbol, orderId=order_id)
     except BinanceAPIException as e:
-        # Unknown order sent. means sl has been somehow canceled.
+        # Unknown order sent. means sl has been somehow canceled. Possible call can be bn_client_no_async line 67
         logger.error(e)
         print(e)
+        return e.message
     else:
         return canceled_order
 
