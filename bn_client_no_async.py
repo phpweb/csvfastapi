@@ -88,7 +88,7 @@ def prepare_sl_order(symbol):
         prepare_order(symbol, 'sell')
 
 
-def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0005):
+def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0002):
     # 0.01 means 1 percent
     # 0.005 means half of 1 percent
     # 0.0001 means 1 out of 1 percent

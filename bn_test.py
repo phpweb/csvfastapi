@@ -1,11 +1,11 @@
 from os.path import exists
 import pickle
 import bn_client_no_async as bn
-# import tr_sockets as soc
+import tr_sockets as soc
 import time
 import utils as utils
 
-# bn.prepare_order('LUNABUSD', 'sell')
+# bn.prepare_order('LUNABUSD', 'buy')
 # bn.prepare_order('BTCBUSD', 'buy')
 # current_price = bn.get_current_price('BTCBUSD')
 # current_price = '0.1120'
@@ -28,7 +28,7 @@ import utils as utils
 # request_time = time.time() - start
 # print(f'NO asyncio sl exists = {sl_exists} time spent = {request_time}')
 
-# soc.start_trade_socket('LUNABUSD')
+soc.start_trade_socket('LUNABUSD')
 # time.sleep(3)
 # soc.start_socket('BTCUSDT')
 # time.sleep(3)
