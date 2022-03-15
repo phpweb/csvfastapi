@@ -1,9 +1,7 @@
 import datetime as dt
-import time
 from fastapi import FastAPI, BackgroundTasks, Request
 import pandas as pd
 from sqlalchemy import create_engine
-from email_transactions.send_email import send_email_background
 from conditions import long
 import bn_client_no_async as bn
 
