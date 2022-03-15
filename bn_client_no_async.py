@@ -83,10 +83,12 @@ def after_buy_actions(order_placed):
 
 def prepare_sl_order(symbol):
     stop_price, price, quantity = calculate_stop_loss_prices_and_quantity(symbol)
-    bn_private.place_stop_loss_order(symbol, quantity, stop_price, price)
+    sl_order = bn_private.place_stop_loss_order(symbol, quantity, stop_price, price)
+    if sl_order == 'Stop price would trigger immediately.':
+        prepare_order(symbol, 'sell')
 
 
-def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0002):
+def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0005):
     # 0.01 means 1 percent
     # 0.005 means half of 1 percent
     # 0.0001 means 1 out of 1 percent

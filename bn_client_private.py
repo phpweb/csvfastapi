@@ -78,6 +78,8 @@ def place_stop_loss_order(symbol, quantity, stop_price, price):
 
     except BinanceAPIException as e:
         logger.error(f'SL with {symbol} quantity {quantity}: ' + e.message)
+        # Catch error: Stop price would trigger immediately.
+        return e.message
     else:
         # Create pickle file to persist if there is a sl order.
         utils.write_sl_to_pickle_file(symbol, price)
