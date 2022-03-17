@@ -80,8 +80,8 @@ def prepare_order(symbol, side):
 
 
 def after_buy_actions(order_placed):
-    print('after buy actions')
-    return True
+    # print('after buy actions')
+    # return True
     # Persist this info for sale later
     symbol = order_placed['symbol']
     bought_price = order_placed['price']
@@ -96,7 +96,7 @@ def prepare_sl_order(symbol):
         prepare_order(symbol, 'sell')
 
 
-def calculate_stop_loss_prices_and_quantity(symbol, percent=0.0009):
+def calculate_stop_loss_prices_and_quantity(symbol, percent=0.001):
     # 0.01 means 1 percent
     # 0.005 means half of 1 percent
     # 0.0001 means 1 out of 1 percent
