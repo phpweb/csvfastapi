@@ -87,7 +87,8 @@ def after_buy_actions(order_placed):
     symbol = order_placed['symbol']
     bought_price = order_placed['price']
     utils.write_bought_price_to_pickle_file(symbol, bought_price)
-    prepare_sl_order(symbol)
+    # prepare_sl_order(symbol)
+    prepare_oco_order(symbol)
 
 
 def prepare_sl_order(symbol):
@@ -124,3 +125,30 @@ def calculate_stop_loss_prices_and_quantity(symbol, percent=0.001):
     stop_limit_price = utils.get_price_with_precision(stop_limit_price, price_tick_size)
 
     return stop_price, stop_limit_price, quantity
+
+
+def prepare_oco_order(symbol):
+    stop_limit_price, stop_price, quantity = calculate_stop_loss_prices_and_quantity(symbol)
+    tp_price = calculate_tp_price(symbol)
+    oco_order = bn_private.place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price)
+    if oco_order == 'Stop price would trigger immediately.':
+        prepare_order(symbol, 'sell')
+
+
+def calculate_tp_price(symbol, percent=0.0005):
+    sym_filters = utils.get_sym_filters(symbol)
+    if sym_filters is None:
+        print('There is no such a sym.')
+        return {"error": "There is no such a sym."}
+    min_quantity = sym_filters['min_quantity']
+    price_tick_size = sym_filters['price_tick_size']
+    ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
+    symbol_balance = bn_private.get_asset_balance(ticker_symbol)
+    if float(symbol_balance) < float(min_quantity):
+        logger.info(f'Minimum quantity is not enough by STOP! {symbol}')
+        return {"error": f"Minimum quantity is not enough by STOP! {symbol}"}
+    current_price = utils.get_current_price(symbol)
+    stop_loss_amount = float(current_price) * float(percent)
+    tp_price = float(current_price) + stop_loss_amount
+    tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
+    return tp_price

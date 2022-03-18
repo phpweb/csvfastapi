@@ -88,6 +88,28 @@ def place_stop_loss_order(symbol, quantity, stop_price, price):
         return sl
 
 
+def place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price):
+    try:
+        recv_window = 50000
+        sl = client.create_oco_order(symbol=symbol,
+                                     side=SIDE_SELL,
+                                     quantity=quantity,
+                                     stopLimitTimeInForce=TIME_IN_FORCE_GTC,
+                                     price=tp_price,
+                                     stopPrice=stop_price,
+                                     stopLimitPrice=stop_limit_price,
+                                     recvWindow=recv_window)
+
+    except BinanceAPIException as e:
+        logger.error(f'SL with {symbol} quantity {quantity}: ' + e.message)
+        # Catch error: Stop price would trigger immediately.
+        return e.message
+    else:
+        # Create pickle file to persist if there is a sl order.
+        utils.write_sl_to_pickle_file(symbol, stop_price)
+        return sl
+
+
 def get_sp_tp_order_and_cancel(symbol):
     """
     We need to check if sl_exists not to make extra api requests by sell action.
@@ -113,6 +135,3 @@ def my_round_step_size(quantity: Union[float, Decimal], step_size: Union[float, 
         return math.floor(quantity)
     elif step_size < 1.0:
         return Decimal(f'{quantity}').quantize(Decimal(f'{step_size}'), rounding=ROUND_DOWN)
-
-
-
