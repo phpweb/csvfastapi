@@ -48,4 +48,5 @@ import utils as utils
 # is_order_f = bn_private.is_order_filled('LUNABUSD', 123232)
 # print(is_order_f)
 # soc_prv.start_user_socket()
+# test
 bn.prepare_order('JASMYBUSD', 'buy')
