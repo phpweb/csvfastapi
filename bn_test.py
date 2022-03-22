@@ -3,7 +3,7 @@ import pickle
 import bn_client_no_async as bn
 import bn_client_private as bn_private
 # import tr_sockets as soc
-import tr_sockets_prvt as soc_prv
+# import tr_sockets_prvt as soc_prv
 import time
 import utils as utils
 
@@ -47,5 +47,5 @@ import utils as utils
 #     print('yesss')
 # is_order_f = bn_private.is_order_filled('LUNABUSD', 123232)
 # print(is_order_f)
-soc_prv.start_user_socket()
-bn.prepare_order('LUNABUSD', 'buy')
+# soc_prv.start_user_socket()
+bn.prepare_order('JASMYBUSD', 'buy')

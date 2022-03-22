@@ -21,7 +21,7 @@ def get_asset_balance(asset_name=''):
     balance = 0
     if balance_resp['asset'] == balance_symbol:
         balance = balance_resp['free']
-    return balance
+    return float(balance)
 
 
 def is_order_filled(symbol, order_id):
@@ -101,7 +101,7 @@ def place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price):
                                      recvWindow=recv_window)
 
     except BinanceAPIException as e:
-        logger.error(f'SL with {symbol} quantity {quantity}: ' + e.message)
+        logger.error(f'OCO with {symbol} quantity {quantity}: ' + e.message)
         # Catch error: Stop price would trigger immediately.
         return e.message
     else:

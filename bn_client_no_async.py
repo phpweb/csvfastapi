@@ -31,13 +31,13 @@ def prepare_order(symbol, side):
         asset_symbol = utils.extract_balance_symbol_from_pair(symbol)
         asset_balance = bn_private.get_asset_balance(asset_symbol)
         # print(f'asset balance = {asset_balance} min notional = {min_notional}')
-        if float(asset_balance) < float(min_notional):
+        if asset_balance < min_notional:
             logger.info(f'Min notional is too small by BUY! {symbol}')
             return {"info": f"Min notional is too small by BUY! {symbol}"}
         current_price_with_precision = utils.get_price_with_precision(current_price, price_tick_size)
         quantity = utils.calculate_quantity(asset_balance, current_price_with_precision, quantity_step_size)
         # print(f'quantity {quantity} min quantity {min_quantity}')
-        if float(quantity) < float(min_quantity):
+        if quantity < min_quantity:
             logger.info(f'Minimum quantity is not enough by BUY! {symbol}')
             return {"info": f"Minimum quantity is not enough by BUY! {symbol}"}
         order_side = SIDE_BUY
@@ -45,13 +45,13 @@ def prepare_order(symbol, side):
         bn_private.get_sp_tp_order_and_cancel(symbol)
         ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
         symbol_balance = bn_private.get_asset_balance(ticker_symbol)
-        symbol_balance = float(symbol_balance) - float(quantity_step_size)
-        quantity = round_step_size(float(symbol_balance), float(quantity_step_size))
-        if float(quantity) < float(min_quantity):
+        symbol_balance = symbol_balance - quantity_step_size
+        quantity = round_step_size(symbol_balance, quantity_step_size)
+        if quantity < min_quantity:
             logger.info(f'Minimum quantity is not enough by SELL! {symbol}')
             return {"info": f"Minimum quantity is not enough by SELL! {symbol}"}
         current_price_with_precision = utils.get_price_with_precision(current_price, price_tick_size)
-        quantity = round_step_size(float(quantity), float(quantity_step_size))
+        quantity = round_step_size(quantity, quantity_step_size)
         order_side = SIDE_SELL
     order_placed = bn_private.create_order(symbol, order_side, quantity, ORDER_TYPE_LIMIT, current_price_with_precision)
     if order_placed:
@@ -111,17 +111,21 @@ def calculate_stop_loss_prices_and_quantity(symbol, percent=0.001):
     price_tick_size = sym_filters['price_tick_size']
     ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
     symbol_balance = bn_private.get_asset_balance(ticker_symbol)
-    if float(symbol_balance) < float(min_quantity):
+    if symbol_balance < min_quantity:
         logger.info(f'Minimum quantity is not enough by STOP! {symbol}')
         return {"error": f"Minimum quantity is not enough by STOP! {symbol}"}
-    symbol_balance = float(symbol_balance) - float(quantity_step_size)
-    quantity = round_step_size(float(symbol_balance), float(quantity_step_size))
+    symbol_balance = symbol_balance - quantity_step_size
+    quantity = round_step_size(symbol_balance, quantity_step_size)
 
     current_price = utils.get_current_price(symbol)
-    stop_loss_amount = float(current_price) * float(percent)
-    stop_price = float(current_price) - stop_loss_amount
-    stop_limit_price = stop_price - float(price_tick_size)
+    stop_loss_amount = current_price * percent
+    stop_price = current_price - stop_loss_amount
     stop_price = utils.get_price_with_precision(stop_price, price_tick_size)
+    # With small amounts there can be situation that the stop price and current bought price is the same.
+    if stop_price == current_price:
+        stop_price = current_price - price_tick_size
+    stop_limit_price = stop_price - price_tick_size
+    # stop_price = utils.get_price_with_precision(stop_price, price_tick_size)
     stop_limit_price = utils.get_price_with_precision(stop_limit_price, price_tick_size)
 
     return stop_price, stop_limit_price, quantity
@@ -130,6 +134,7 @@ def calculate_stop_loss_prices_and_quantity(symbol, percent=0.001):
 def prepare_oco_order(symbol):
     stop_limit_price, stop_price, quantity = calculate_stop_loss_prices_and_quantity(symbol)
     tp_price = calculate_tp_price(symbol)
+    print(f'stop_limit_price, stop_price, tp_price {stop_limit_price, stop_price, tp_price}')
     oco_order = bn_private.place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price)
     if oco_order == 'Stop price would trigger immediately.':
         prepare_order(symbol, 'sell')
@@ -144,11 +149,17 @@ def calculate_tp_price(symbol, percent=0.0009):
     price_tick_size = sym_filters['price_tick_size']
     ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
     symbol_balance = bn_private.get_asset_balance(ticker_symbol)
-    if float(symbol_balance) < float(min_quantity):
+    if symbol_balance < min_quantity:
         logger.info(f'Minimum quantity is not enough by STOP! {symbol}')
         return {"error": f"Minimum quantity is not enough by STOP! {symbol}"}
     current_price = utils.get_current_price(symbol)
-    stop_loss_amount = float(current_price) * float(percent)
-    tp_price = float(current_price) + stop_loss_amount
+    stop_loss_amount = current_price * percent
+    tp_price = current_price + stop_loss_amount
+    print(f'current price = {current_price}')
+    print(f'price tick size = {price_tick_size}')
     tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
+    # If tp price is the same with the current price.
+    if tp_price == current_price:
+        tp_price = current_price + price_tick_size
+    # tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
     return tp_price

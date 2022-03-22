@@ -12,7 +12,7 @@ client = Client()
 def get_current_price(symbol):
     url = requests.get(f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}")
     data = url.json()
-    return data['price']
+    return float(data['price'])
 
 
 def calculate_win_los_percent_with_decimal(start_price, end_price):
@@ -42,12 +42,12 @@ def get_sym_filters(symbol):
         symbol_filters = {}
         for filters in pair_info["filters"]:
             if filters["filterType"] == "PRICE_FILTER":
-                symbol_filters['price_tick_size'] = filters["tickSize"].rstrip('0').rstrip('.')
+                symbol_filters['price_tick_size'] = float(filters["tickSize"].rstrip('0').rstrip('.'))
             if filters["filterType"] == "MIN_NOTIONAL":
-                symbol_filters['min_notional'] = filters["minNotional"].rstrip('0').rstrip('.')
+                symbol_filters['min_notional'] = float(filters["minNotional"].rstrip('0').rstrip('.'))
             if filters["filterType"] == "LOT_SIZE":
-                symbol_filters['min_quantity'] = filters["minQty"].rstrip('0').rstrip('.')
-                symbol_filters['quantity_step_size'] = filters["stepSize"].rstrip('0').rstrip('.')
+                symbol_filters['min_quantity'] = float(filters["minQty"].rstrip('0').rstrip('.'))
+                symbol_filters['quantity_step_size'] = float(filters["stepSize"].rstrip('0').rstrip('.'))
         return symbol_filters
     return None
 
@@ -57,7 +57,7 @@ def get_price_with_precision(current_price, price_precision):
     # Find the decimal place to format
     price_precision = str(price_precision)[::-1].find('.')
     price = "{:.{}f}".format(price, price_precision)
-    return price
+    return float(price)
 
 
 def calculate_quantity(balance, current_price, precision):
