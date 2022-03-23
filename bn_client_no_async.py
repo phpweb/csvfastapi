@@ -82,7 +82,7 @@ def prepare_order(symbol, side):
 def after_buy_actions(order_placed):
     # print('after buy actions')
     # Test
-    # return True
+    return True
     # Persist this info for sale later
     symbol = order_placed['symbol']
     bought_price = order_placed['price']
