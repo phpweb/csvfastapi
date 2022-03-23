@@ -118,17 +118,17 @@ def calculate_stop_loss_prices_and_quantity(symbol, percent=0.001):
     quantity = round_step_size(symbol_balance, quantity_step_size)
 
     current_price = utils.get_current_price(symbol)
-    stop_loss_amount = current_price * percent
-    stop_price = current_price - stop_loss_amount
+    stop_loss_amount = float(current_price) * percent
+    stop_price = float(current_price) - stop_loss_amount
     stop_price = utils.get_price_with_precision(stop_price, price_tick_size)
     # With small amounts there can be situation that the stop price and current bought price is the same.
     if stop_price == current_price:
-        stop_price = current_price - price_tick_size
-    stop_limit_price = stop_price - price_tick_size
-    # stop_price = utils.get_price_with_precision(stop_price, price_tick_size)
+        stop_price = float(current_price) - float(price_tick_size)
+    stop_limit_price = float(stop_price) - float(price_tick_size)
+    stop_price = utils.get_price_with_precision(stop_price, price_tick_size)
     stop_limit_price = utils.get_price_with_precision(stop_limit_price, price_tick_size)
 
-    return stop_price, stop_limit_price, quantity
+    return stop_limit_price, stop_price, quantity
 
 
 def prepare_oco_order(symbol):
@@ -153,13 +153,13 @@ def calculate_tp_price(symbol, percent=0.0009):
         logger.info(f'Minimum quantity is not enough by STOP! {symbol}')
         return {"error": f"Minimum quantity is not enough by STOP! {symbol}"}
     current_price = utils.get_current_price(symbol)
-    stop_loss_amount = current_price * percent
-    tp_price = current_price + stop_loss_amount
+    stop_loss_amount = float(current_price) * percent
+    tp_price = float(current_price) + stop_loss_amount
     print(f'current price = {current_price}')
     print(f'price tick size = {price_tick_size}')
     tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
     # If tp price is the same with the current price.
     if tp_price == current_price:
-        tp_price = current_price + price_tick_size
-    # tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
+        tp_price = float(current_price) + (float(price_tick_size) + float(price_tick_size))
+    tp_price = utils.get_price_with_precision(tp_price, price_tick_size)
     return tp_price

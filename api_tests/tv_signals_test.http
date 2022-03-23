@@ -2,10 +2,10 @@ POST http://127.0.0.1:8000/luna
 Content-Type: application/json
 
 {
-   "symbol":"LUNABUSD",
+   "symbol":"SHIBBUSD",
    "tv_price":"82.77",
    "timeframe":"S",
-   "side":"sell",
+   "side":"buy",
    "alert_algo":"heikin_benimki"
 }
 
