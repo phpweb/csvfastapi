@@ -140,7 +140,7 @@ def prepare_oco_order(symbol):
         prepare_order(symbol, 'sell')
 
 
-def calculate_tp_price(symbol, percent=0.03):
+def calculate_tp_price(symbol, percent=0.01):
     sym_filters = utils.get_sym_filters(symbol)
     if sym_filters is None:
         print('There is no such a sym.')
