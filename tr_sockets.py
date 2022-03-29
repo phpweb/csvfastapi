@@ -16,9 +16,11 @@ d = {}
 
 def start_trade_socket(symbol):
     print(f'Starting {symbol}')
+    r_mng.reset_updated_sl_price()
     d[f'{symbol}'] = twm.start_trade_socket(callback=handle_trade_socket_message, symbol=symbol)
 
 
 def stop_trade_socket(symbol):
     print(f'Stopping {symbol}')
+    r_mng.reset_updated_sl_price()
     twm.stop_socket(d[f'{symbol}'])

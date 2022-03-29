@@ -11,3 +11,4 @@ TvSignals.db
 api.log
 sl_tmp/*.pkl
 sl_tmp/buy_pr/*.pkl
+sl_tmp/tp_pr/*.pkl

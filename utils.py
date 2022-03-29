@@ -132,3 +132,27 @@ def remove_bought_price_pickle_file(symbol):
     file_exists = exists(file_path)
     if file_exists:
         os.remove(file_path)
+
+
+def write_tp_price_to_pickle_file(symbol, price):
+    file_path = f'sl_tmp/tp_pr/{symbol}.pkl'
+    file = open(file_path, 'wb')
+    data = {
+        'symbol': symbol,
+        'tp_price': price
+    }
+    pickle.dump(data, file)
+    file.close()
+
+
+def read_tp_price_from_pickle_file(symbol):
+    file_path = f'sl_tmp/tp_pr/{symbol}.pkl'
+    file_exists = exists(file_path)
+    if not file_exists:
+        return False
+    file = open(file_path, 'rb')
+    data = pickle.load(file)
+    file.close()
+    if data['symbol'] == symbol:
+        return data['tp_price']
+    return False

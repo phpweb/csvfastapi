@@ -131,14 +131,15 @@ def calculate_stop_loss_prices_and_quantity(symbol, percent=0.01):
     return stop_limit_price, stop_price, quantity
 
 
-def prepare_oco_order(symbol):
-    stop_limit_price, stop_price, quantity = calculate_stop_loss_prices_and_quantity(symbol)
-    tp_price = calculate_tp_price(symbol)
+def prepare_oco_order(symbol, sl_percent=0.01, tp_percent=0.005, tp_price=0):
+    stop_limit_price, stop_price, quantity = calculate_stop_loss_prices_and_quantity(symbol, sl_percent)
+    if tp_price == 0:
+        tp_price = calculate_tp_price(symbol, tp_percent)
     print(f'stop_limit_price, stop_price, tp_price {stop_limit_price, stop_price, tp_price}')
     oco_order = bn_private.place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price)
     if oco_order == 'Stop price would trigger immediately.':
         prepare_order(symbol, 'sell')
-
+    utils.write_tp_price_to_pickle_file(symbol, tp_price)
 
 def calculate_tp_price(symbol, percent=0.005):
     sym_filters = utils.get_sym_filters(symbol)
