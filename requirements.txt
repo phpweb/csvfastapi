@@ -6,7 +6,6 @@ selenium
 websocket-client
 sqlalchemy
 APScheduler
-unicorn_binance_websocket_api==1.38.0
 python-dotenv
 pydantic
 requests

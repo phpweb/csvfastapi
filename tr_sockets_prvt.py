@@ -1,4 +1,4 @@
-from binance import ThreadedWebsocketManager
+from binance.streams import ThreadedWebsocketManager
 import tr_sockets as sym_soc
 import utils as utils
 from config import get_settings
