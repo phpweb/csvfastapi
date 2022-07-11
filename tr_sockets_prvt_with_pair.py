@@ -36,4 +36,5 @@ def stop_trade_socket(symbol):
     socket_name = twm.getName()
     print(f'Socket name {socket_name}')
     if socket_name and symbol in d:
+        utils.remove_sl_pickle_file(symbol)
         twm.stop_socket(d[f'{symbol}'])
