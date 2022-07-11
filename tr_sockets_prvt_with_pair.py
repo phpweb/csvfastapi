@@ -35,5 +35,5 @@ def stop_trade_socket(symbol):
     print(f'Stopping {symbol}')
     socket_name = twm.getName()
     print(f'Socket name {socket_name}')
-    if socket_name:
+    if socket_name and symbol in d:
         twm.stop_socket(d[f'{symbol}'])
