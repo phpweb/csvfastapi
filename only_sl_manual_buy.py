@@ -67,8 +67,8 @@ def handle_user_socket_message(msg):
             sl_price = msg['p']
             sl_order_id = msg['i']
             # watch_if_current_price_ls_stop_loss_price(symbol, sl_price)
-            utils.write_sl_to_pickle_file(symbol, sl_price, sl_order_id)
-            live_price.start_trade_socket(symbol)
+            if utils.write_sl_to_pickle_file(symbol, sl_price, sl_order_id):
+                live_price.start_trade_socket(symbol)
         # Stop trade socket if SELL is filled
         if (msg['S'] == 'SELL' and msg['o'] == 'STOP_LOSS_LIMIT' and msg['X'] == 'FILLED') \
                 or (msg['S'] == 'SELL' and msg['o'] == 'LIMIT' and msg['X'] == 'FILLED') or \

@@ -78,6 +78,7 @@ def write_sl_to_pickle_file(symbol, sl, sl_order_id=None):
     }
     pickle.dump(data, file)
     file.close()
+    return True
 
 
 def read_sl_price_from_pickle_file(symbol):
@@ -95,6 +96,9 @@ def read_sl_price_from_pickle_file(symbol):
 
 def write_bought_price_to_pickle_file(symbol, price):
     file_path = f'sl_tmp/buy_pr/{symbol}.pkl'
+    file_exists = exists(file_path)
+    if file_exists:
+        os.remove(file_path)
     file = open(file_path, 'wb')
     data = {
         'symbol': symbol,
