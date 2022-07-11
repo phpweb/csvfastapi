@@ -5,6 +5,7 @@ import bn_client_private as bn_private
 from debug_log import logger
 from binance.helpers import round_step_size
 import bn_client_no_async as sell_order
+import tr_sockets_prvt_with_pair as live_price
 
 api_key = get_settings().api_key
 api_secret = get_settings().api_secret
@@ -21,7 +22,7 @@ def prepare_sl_order(symbol, bought_price):
         sell_order.prepare_order(symbol, 'sell')
 
 
-def calculate_stop_loss_prices_and_quantity(symbol, bought_price, percent=0.01):
+def calculate_stop_loss_prices_and_quantity(symbol, bought_price, percent=0.003):
     # 0.01 means 1 percent
     # 0.005 means half of 1 percent
     # 0.0001 means 1 out of 1 percent
@@ -61,6 +62,18 @@ def handle_user_socket_message(msg):
         if msg['S'] == 'BUY' and msg['X'] == 'FILLED':
             bought_price = msg['p']
             prepare_sl_order(symbol, bought_price)
+        # If SL has placed and new then start watching live price
+        if msg['S'] == 'SELL' and msg['o'] == 'STOP_LOSS_LIMIT' and msg['X'] == 'NEW':
+            sl_price = msg['p']
+            sl_order_id = msg['i']
+            # watch_if_current_price_ls_stop_loss_price(symbol, sl_price)
+            utils.write_sl_to_pickle_file(symbol, sl_price, sl_order_id)
+            live_price.start_trade_socket(symbol)
+        # Stop trade socket if SELL is filled
+        if (msg['S'] == 'SELL' and msg['o'] == 'STOP_LOSS_LIMIT' and msg['X'] == 'FILLED') \
+                or (msg['S'] == 'SELL' and msg['o'] == 'LIMIT' and msg['X'] == 'FILLED') or \
+                (msg['S'] == 'SELL' and msg['o'] == 'STOP_LOSS_LIMIT' and msg['X'] == 'CANCELED'):
+            live_price.stop_trade_socket(symbol)
         print('yes only BUSD')
         print(msg)
 

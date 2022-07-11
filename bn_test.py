@@ -6,6 +6,7 @@ import bn_client_private as bn_private
 # import tr_sockets_prvt as soc_prv
 import time
 import utils as utils
+import only_sl_manual_buy as only_manual
 
 # bn.prepare_order('LUNABUSD', 'buy')
 # bn.prepare_order('BTCBUSD', 'buy')
@@ -48,4 +49,5 @@ import utils as utils
 # is_order_f = bn_private.is_order_filled('LUNABUSD', 123232)
 # print(is_order_f)
 # soc_prv.start_user_socket()
-bn.prepare_order('LUNABUSD', 'buy')
+# bn.prepare_order('LUNABUSD', 'buy')
+only_manual.place_market_sell_order('BURGERBUSD')

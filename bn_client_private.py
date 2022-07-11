@@ -7,6 +7,7 @@ from config import get_settings
 from debug_log import logger
 from binance.exceptions import BinanceAPIException
 import utils as utils
+from binance.helpers import round_step_size
 
 api_key = get_settings().api_key
 api_secret = get_settings().api_secret
@@ -108,6 +109,23 @@ def place_oco_order(symbol, quantity, stop_limit_price, stop_price, tp_price):
         # Create pickle file to persist if there is a sl order.
         utils.write_sl_to_pickle_file(symbol, stop_price)
         return sl
+
+
+def place_market_order(symbol):
+    sym_filters = utils.get_sym_filters(symbol)
+    if sym_filters is None:
+        print('There is no such a sym.')
+        return {"error": "There is no such a sym."}
+    min_quantity = sym_filters['min_quantity']
+    quantity_step_size = sym_filters['quantity_step_size']
+    ticker_symbol = utils.extract_ticker_symbol_from_pair(symbol)
+    symbol_balance = get_asset_balance(ticker_symbol)
+    if symbol_balance < min_quantity:
+        logger.info(f'Minimum quantity is not enough by STOP! {symbol}')
+        return {"error": f"Minimum quantity is not enough by STOP! {symbol}"}
+    symbol_balance = symbol_balance - quantity_step_size
+    quantity = round_step_size(symbol_balance, quantity_step_size)
+    mo = client.order_market_sell(symbol=symbol, quantity=quantity)
 
 
 def get_sp_tp_order_and_cancel(symbol):

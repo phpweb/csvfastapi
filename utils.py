@@ -68,15 +68,29 @@ def calculate_quantity(balance, current_price, precision):
     return float(target_quantity)
 
 
-def write_sl_to_pickle_file(symbol, sl):
+def write_sl_to_pickle_file(symbol, sl, sl_order_id=None):
     file_path = f'sl_tmp/{symbol}.pkl'
     file = open(file_path, 'wb')
     data = {
         'symbol': symbol,
-        'sl': sl
+        'sl': sl,
+        'orderId': sl_order_id
     }
     pickle.dump(data, file)
     file.close()
+
+
+def read_sl_price_from_pickle_file(symbol):
+    file_path = f'sl_tmp/{symbol}.pkl'
+    file_exists = exists(file_path)
+    if not file_exists:
+        return False
+    file = open(file_path, 'rb')
+    data = pickle.load(file)
+    file.close()
+    if data['symbol'] == symbol:
+        return data
+    return False
 
 
 def write_bought_price_to_pickle_file(symbol, price):
