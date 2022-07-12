@@ -70,6 +70,9 @@ def calculate_quantity(balance, current_price, precision):
 
 def write_sl_to_pickle_file(symbol, sl, sl_order_id=None):
     file_path = f'sl_tmp/{symbol}.pkl'
+    file_exists = exists(file_path)
+    if file_exists:
+        os.remove(file_path)
     file = open(file_path, 'wb')
     data = {
         'symbol': symbol,
