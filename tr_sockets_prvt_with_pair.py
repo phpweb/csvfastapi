@@ -11,16 +11,19 @@ def handle_trade_socket_message(msg):
     # r_mng.watch_sl_tp(msg)
     symbol = msg['s']
     sl_data = utils.read_sl_price_from_pickle_file(symbol)
-    sl_price = sl_data['sl']
-    sl_order_id = sl_data['orderId']
-    # sl_price = '3.41500000'
-    # print(f'SL price = {sl_price}')
-    current_price = msg['p']
-    # print(f'Current price = {current_price}')
-    if current_price < sl_price:
-        # print('Current price SL den kücükkkkkkk')
-        bn_private.cancel_order(symbol, sl_order_id)
-        bn_private.place_market_order(symbol)
+    if sl_data:
+        print('data')
+        print(sl_data)
+        sl_price = sl_data['sl']
+        sl_order_id = sl_data['orderId']
+        # sl_price = '3.41500000'
+        print(f'SL price = {sl_price}')
+        current_price = msg['p']
+        # print(f'Current price = {current_price}')
+        if current_price < sl_price:
+            # print('Current price SL den kücükkkkkkk')
+            bn_private.cancel_order(symbol, sl_order_id)
+            bn_private.place_market_order(symbol)
 
 
 d = {}

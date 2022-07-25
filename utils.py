@@ -94,7 +94,6 @@ def read_sl_price_from_pickle_file(symbol):
     file.close()
     if data['symbol'] == symbol:
         return data
-    return False
 
 
 def write_bought_price_to_pickle_file(symbol, price):

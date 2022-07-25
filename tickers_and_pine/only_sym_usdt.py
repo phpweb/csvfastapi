@@ -11,8 +11,10 @@ data = json.loads(text)
 symbols = [x for x in data['symbols'] if x['symbol'].endswith('USDT')]
 symbols_data = []
 for symbol in symbols:
-    symbol = symbol['symbol']
-    symbols_data.append(symbol)
+    # print(symbol['symbol'] + ' = ' + symbol['status'])
+    if symbol['status'] == 'TRADING':
+        symbol = symbol['symbol']
+        symbols_data.append(symbol)
 df = pd.DataFrame(symbols_data)
 # reg_ex = 'UP|DOWN|TUSD|BULL|BEAR'
 # df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
