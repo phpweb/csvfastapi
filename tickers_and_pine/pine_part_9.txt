@@ -228,7 +228,7 @@ array.push(roc_arr, roc32)
 if barstate.islast
 	for i = 0 to array.size(u_arr) - 1
 		if array.get(u_arr, i)
-			roc_alert_condition = array.get(roc_arr, i) > 10 ? true: false
+			roc_alert_condition = array.get(roc_arr, i) > 5 ? true: false
 			if roc_alert_condition
 				alertstring = '{"symbol": "' + array.get(s_arr, i) + '"}'
 				alert(alertstring, alert.freq_once_per_bar)

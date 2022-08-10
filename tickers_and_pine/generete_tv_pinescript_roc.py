@@ -165,10 +165,11 @@ calculations += 'only_symbol(s) =>\n\tarray.get(str.split(s, ":"), 1)\n\n'
 calculations += 'screener_func() =>\n\t//ROC\n\tpercent_change = ta.roc(close, 1)\n\tpercent_change\n\n'
 
 # Alert condition
+percentage_change_amount = 5
 if_condition_part = 'if barstate.islast'
 if_condition_part += f"\n\tfor i = 0 to array.size(u_arr) - 1"
 if_condition_part += "\n\t\tif array.get(u_arr, i)"
-if_condition_part += "\n\t\t\troc_alert_condition = array.get(roc_arr, i) > 10 ? true: false"
+if_condition_part += f"\n\t\t\troc_alert_condition = array.get(roc_arr, i) > {percentage_change_amount} ? true: false"
 if_condition_part += "\n\t\t\tif roc_alert_condition"
 if_condition_part += '\n\t\t\t\talertstring = \'{"symbol": "\' + array.get(s_arr, i) + \'"}\''
 if_condition_part += '\n\t\t\t\talert(alertstring, alert.freq_once_per_bar)\n'

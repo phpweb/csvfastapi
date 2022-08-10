@@ -1,4 +1,6 @@
 import os
+import re
+
 import requests
 import json
 import pandas as pd
@@ -11,13 +13,12 @@ data = json.loads(text)
 symbols = [x for x in data['symbols'] if x['symbol'].endswith('USDT')]
 symbols_data = []
 for symbol in symbols:
-    # print(symbol['symbol'] + ' = ' + symbol['status'])
     if symbol['status'] == 'TRADING':
         symbol = symbol['symbol']
         symbols_data.append(symbol)
 df = pd.DataFrame(symbols_data)
-# reg_ex = 'UP|DOWN|TUSD|BULL|BEAR'
-# df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
+reg_ex = 'UP|DOWN'
+df = df[~df.stack().str.contains(reg_ex).groupby(level=0).any()]
 df.to_csv(path, mode='w', header=False, index=False)
 print('before write')
 print(len(df))
