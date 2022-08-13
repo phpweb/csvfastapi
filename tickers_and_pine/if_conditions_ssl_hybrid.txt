@@ -1,0 +1,22 @@
+if barstate.islast
+    for i = 0 to array.size(u_arr) - 1
+        if array.get(u_arr, i)
+            if array.get(buy_continuation_arr, i)
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '","cond": "buyContinuation", "tf": "' + timeframe.period + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(baseLineBuyAlertCond_arr, i)
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '","cond": "baseLineBuyAlert", "tf": "' + timeframe.period + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(baseLineSellAlertCond_arr, i)
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '","cond": "baseLineSellAlert", "tf": "' + timeframe.period + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(sslExitSell_arr, i)
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '","cond": "sslExitSell", "tf": "' + timeframe.period + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(sslExitBuy_arr, i)
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '","cond": "sslExitBuy", "tf": "' + timeframe.period + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
