@@ -1,0 +1,10 @@
+if barstate.islast
+    for i = 0 to array.size(u_arr) - 1
+        if array.get(u_arr, i)
+            if array.get(codiff_plot_arr, i) == 1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","cond_codiff": "buy", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(codiff_plot_arr, i) == -1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","cond_codiff": "sell", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
