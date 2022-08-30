@@ -1,0 +1,21 @@
+import pandas as pd
+import pprint
+
+path = 'all_usdt.csv'
+
+read_csv = pd.read_csv(path, header=None)
+total = len(read_csv)
+max_items = 40
+i = 1
+lst = []
+j = 1
+n = 5
+symbols_array = f'// SYMBOLS //\n// Part {str(j)}\n\n'
+u_array_str = f'/////////////\n// SYMBOLS //\n// Part {str(j)}\n\n'
+security_calls = f'// Security calls \n//Part {str(j)}\n\n'
+# Add Symbols
+push_s_array = '// Add Symbols \n'
+# FLAGS
+push_u_array = '// FLAGS \n'
+# CLOSE
+current_price_arr = '// Current price \n'

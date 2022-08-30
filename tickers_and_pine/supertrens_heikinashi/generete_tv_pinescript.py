@@ -10,11 +10,9 @@ i = 1
 lst = []
 j = 1
 n = 5
-str_test = f'// SYMBOLS //\n// Part {str(j)}\n\n'
+symbols_array = f'// SYMBOLS //\n// Part {str(j)}\n\n'
 u_array_str = f'/////////////\n// SYMBOLS //\n// Part {str(j)}\n\n'
 security_calls = f'// Security calls \n//Part {str(j)}\n\n'
-s_array = f"\n//ARRAYS\ns_arr{str(j)} = array.new_string(0)\n"
-u_arr = f"\n//Symbols\nu_arr{str(j)} = array.new_bool(0)\n"
 # Add Symbols
 push_s_array = '// Add Symbols \n'
 # FLAGS
@@ -27,7 +25,6 @@ trendhtf_arr = '// Baseline SELL alert condition \n'
 trendhtf_minus_one_arr = '// Condition for plotting \n'
 
 # arrays to create the type to push later
-arrays_to_push = f'/////////////\n// ARRAYS //\n// Part {str(j)}\n\n'
 
 str_test_dict = {}
 u_array_dict = {}
@@ -48,20 +45,14 @@ for x in range(read_csv.size):
     # cnt_str = str(j) + counter_str
     cnt_str = counter_str
     # symbol string
-    str_test += 's' + cnt_str + " = input.symbol('" + read_csv.values[x][0] \
-                + "', group = 'Symbols', inline = '" + 's' + cnt_str + "')\n"
-    str_test_dict[j] = str_test
+    symbols_array += 's' + cnt_str + " = input.symbol('" + read_csv.values[x][0] \
+                     + "', group = 'Symbols', inline = '" + 's' + cnt_str + "')\n"
+    str_test_dict[j] = symbols_array
 
     # u symbol string
     u_array_str += 'u' + cnt_str + " = input.bool(true,  title = \"\", group = 'Symbols', inline = 's" + cnt_str + "')\n"
     u_array_dict[j] = u_array_str
     # security calls
-    # [cl01, rsi01, tsi01, adx01, rvol01, sup01] = request.security(s01, timeframe.period, screener_func())
-    # if there are more than one function
-    # security_calls += f"[cl{cnt_str}, rsi{cnt_str}, tsi{cnt_str}, adx{cnt_str}, rvol{cnt_str}, sup{cnt_str}] = " \
-    #                   f"request.security(s{cnt_str}, timeframe.period, screener_func())\n"
-
-    # security_calls += f"roc{cnt_str} = request.security(s{cnt_str}, timeframe.period, screener_func())\n"
     security_calls += f"[current_price{cnt_str}, Trend{cnt_str}, TrendMinusOne{cnt_str}, TrendHtf{cnt_str}, TrendHtfMinusOne{cnt_str}] = " \
                       f"request.security(s{cnt_str}, timeframe.period, screener_func())\n"
 
@@ -71,10 +62,10 @@ for x in range(read_csv.size):
     arrays_to_push1 += f"s_arr   = array.new_string(0)\n"
     arrays_to_push2 = f"u_arr   = array.new_bool(0)\n"
     arrays_to_push3 = f"current_price_arr   = array.new_float(0)\n"
-    arrays_to_push4 = f"Trend_arr   = array.new_bool(0)\n"
-    arrays_to_push5 = f"TrendMinusOne_arr   = array.new_bool(0)\n"
-    arrays_to_push6 = f"TrendHtf_arr   = array.new_bool(0)\n"
-    arrays_to_push7 = f"TrendHtfMinusOne_arr   = array.new_bool(0)\n"
+    arrays_to_push4 = f"trend_arr   = array.new_bool(0)\n"
+    arrays_to_push5 = f"trend_minus_one_arr   = array.new_bool(0)\n"
+    arrays_to_push6 = f"trendhtf_arr   = array.new_bool(0)\n"
+    arrays_to_push7 = f"trendhtf_minus_one_arr   = array.new_bool(0)\n"
     arrays_to_push_dict[
         j] = arrays_to_push1 + arrays_to_push2 + arrays_to_push3 + arrays_to_push4 + arrays_to_push5 + arrays_to_push6 + arrays_to_push7
 
@@ -103,11 +94,9 @@ for x in range(read_csv.size):
     if i % max_items == 0:
         j += 1
         # arrays
-        s_array += f"s_arr{str(j)} = array.new_string(0)\n"
-        u_arr += f"u_arr{str(j)} = array.new_bool(0)\n"
         # str_test += f'\n// Part {str(j)}\n\n'
         # make them empty after 40
-        str_test = f'// SYMBOLS //\n// Part {str(j)}\n\n'
+        symbols_array = f'// SYMBOLS //\n// Part {str(j)}\n\n'
         u_array_str = f'/////////////\n// SYMBOLS //\n// Part {str(j)}\n\n'
         security_calls = f'// Security calls \n//Part {str(j)}\n\n'
         push_s_array = '// Add Symbols \n'
