@@ -1,0 +1,95 @@
+//@version=5
+indicator("SSL Hybrid Benimki Part_2", overlay=true)
+
+//ATR
+atrlen = input(14, 'ATR Period')
+mult = input.float(1, 'ATR Multi', step=0.1)
+smoothing = input.string(title='ATR Smoothing', defval='WMA', options=['RMA', 'SMA', 'EMA', 'WMA'])
+
+// Get only symbol
+only_symbol(s) =>
+    array.get(str.split(s, ":"), 1)
+
+ma_function(source, atrlen) =>
+    if smoothing == 'RMA'
+        ta.rma(source, atrlen)
+    else
+        if smoothing == 'SMA'
+            ta.sma(source, atrlen)
+        else
+            if smoothing == 'EMA'
+                ta.ema(source, atrlen)
+            else
+                ta.wma(source, atrlen)
+atr_slen = ma_function(ta.tr(true), atrlen)
+
+
+SSL2Type = 'JMA'
+len2 = 5
+//
+SSL3Type = 'HMA'
+len3 = 15
+src = close
+
+////BASELINE / SSL1 / SSL2 / EXIT MOVING AVERAGE VALUES
+maType = 'HMA'
+len = 60
+
+
+ma(type, src, len) =>
+    float result = 0
+    if type == 'HMA'  // Hull
+        result := ta.wma(2 * ta.wma(src, len / 2) - ta.wma(src, len), math.round(math.sqrt(len)))
+        result
+    result
+
+
+screener_func() =>
+    ///SSL 1 and SSL2
+    emaHigh = ma(maType, high, len)
+    emaLow = ma(maType, low, len)
+
+    maHigh = ma(SSL2Type, high, len2)
+    maLow = ma(SSL2Type, low, len2)
+
+    //SSL2 VALUES
+    Hlv2 = int(na)
+    Hlv2 := close > maHigh ? 1 : close < maLow ? -1 : Hlv2[1]
+    sslDown2 = Hlv2 < 0 ? maHigh : maLow
+
+    ///EXIT
+    ExitHigh = ma(SSL3Type, high, len3)
+    ExitLow = ma(SSL3Type, low, len3)
+
+    BBMC = ma(maType, close, len)
+
+    ///Keltner Baseline Channel
+    useTrueRange = input.bool(true)
+    multy = input.float(0.2, step=0.05, title='Base Channel Multiplier')
+    Keltma = ma(maType, src, len)
+    range_1 = useTrueRange ? ta.tr : high - low
+    rangema = ta.ema(range_1, len)
+    upperk = Keltma + rangema * multy
+    lowerk = Keltma - rangema * multy
+
+    //EXIT VALUES
+    Hlv3 = int(na)
+    Hlv3 := close > ExitHigh ? 1 : close < ExitLow ? -1 : Hlv3[1]
+    sslExit = Hlv3 < 0 ? ExitHigh : ExitLow
+    base_cross_Long = ta.crossover(close, sslExit)
+    base_cross_Short = ta.crossover(sslExit, close)
+    codiff = base_cross_Long ? 1 : base_cross_Short ? -1 : na
+
+
+    atr_crit = input.float(0.9, step=0.1, title='Continuation ATR Criteria')
+    upper_half = atr_slen * atr_crit + close
+    lower_half = close - atr_slen * atr_crit
+    buy_inatr = lower_half < sslDown2
+    buy_cont = close > BBMC and close > sslDown2
+    buyContinuation = buy_inatr and buy_cont
+    sslExitSell = ta.crossover(close, sslExit)
+    sslExitBuy = ta.crossover(sslExit, close)
+    baseLineBuyAlertCond = ta.crossover(close, upperk)
+    baseLineSellAlertCond = ta.crossover(lowerk, close)
+
+    [math.round_to_mintick(close), buyContinuation, baseLineBuyAlertCond, baseLineSellAlertCond, codiff, sslExitSell, sslExitBuy]
