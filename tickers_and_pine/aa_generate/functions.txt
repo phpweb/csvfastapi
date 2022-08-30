@@ -60,3 +60,4 @@ screener_func() =>
     TrendHtf := closehtf > TDownhtf[1] ? 1 : closehtf < TUphtf[1] ? -1 : nz(TrendHtf[1], 1)
 
     [math.round_to_mintick(close), Trend, Trend[1], TrendHtf, TrendHtf[1]]
+

@@ -1,0 +1,18 @@
+if barstate.islast
+    for i = 0 to array.size(u_arr) - 1
+        if array.get(u_arr, i)
+            if array.get(trend_arr, i) == 1 and array.get(trend_minus_one_arr, i) == -1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","side": "BUY", "cond": "super_trend", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(trend_arr, i) == -1 and array.get(trend_minus_one_arr, i) == 1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","side": "SELL", "cond": "super_trend", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(trendhtf_arr, i) == 1 and array.get(trendhtf_minus_one_arr, i) == -1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","side": "BUY", "cond": "trend_htf", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
+
+            if array.get(trendhtf_arr, i) == -1 and array.get(trendhtf_minus_one_arr, i) == 1
+                alertstring = '{"symbol": "' + array.get(s_arr, i) + '","side": "SELL", "cond": "trend_htf", "tf": "' + timeframe.period + '", "tv_price": "' + str.tostring(array.get(current_price_arr, i)) + '"}'
+                alert(alertstring, alert.freq_once_per_bar)
