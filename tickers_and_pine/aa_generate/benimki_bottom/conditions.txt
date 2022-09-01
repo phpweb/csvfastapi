@@ -1,0 +1,63 @@
+mode = input.string(title='HTF Method', defval='Auto', options=['Auto', 'User Defined'])
+//auto higher time frame
+HTFo = timeframe.period == '1' ? '5' : timeframe.period == '3' ? '15' : timeframe.period == '5' ? '15' : timeframe.period == '15' ? '60' : timeframe.period == '30' ? '120' : timeframe.period == '45' ? '120' : timeframe.period == '60' ? '240' : timeframe.period == '120' ? '240' : timeframe.period == '180' ? '240' : timeframe.period == '240' ? 'D' : timeframe.period == 'D' ? 'W' : timeframe.period == 'W' ? '5W' : 'D'
+
+HTFm = input.timeframe('5', title='Time Frame (if HTF Method=User Defined)')
+HTF = mode == 'Auto' ? HTFo : HTFm
+
+Mult = input.float(defval=2.0, title='ATR Factor', minval=0.5, maxval=100, step=0.1)
+Period = input.int(defval=7, title='ATR Period', minval=1, maxval=100)
+
+// Get only symbol
+only_symbol(s) =>
+    array.get(str.split(s, ":"), 1)
+
+// current time frame
+
+//Heikin Ashi high, low, close
+h = request.security(ticker.heikinashi(syminfo.tickerid), timeframe.period, high)
+l = request.security(ticker.heikinashi(syminfo.tickerid), timeframe.period, low)
+c = request.security(ticker.heikinashi(syminfo.tickerid), timeframe.period, close)
+
+//HeikinAshi atr
+Atr = request.security(ticker.heikinashi(syminfo.tickerid), timeframe.period, ta.atr(Period))
+
+
+screener_func() =>
+    ///SSL 1 and SSL2
+    Up = (h + l) / 2 - Mult * Atr
+    Dn = (h + l) / 2 + Mult * Atr
+
+    float TUp = na
+    float TDown = na
+    Trend = 0
+
+    TUp := c[1] > TUp[1] ? math.max(Up, TUp[1]) : Up
+    TDown := c[1] < TDown[1] ? math.min(Dn, TDown[1]) : Dn
+    Trend := c > TDown[1] ? 1 : c < TUp[1] ? -1 : nz(Trend[1], 1)
+    Trailingsl = Trend == 1 ? TUp : TDown
+    linecolor = Trend == 1 and nz(Trend[1]) == 1 ? color.lime : Trend == -1 and nz(Trend[1]) == -1 ? color.red : na
+
+    // Higher Time Frame
+
+    ////// HTF high, low, close
+    highhtf = request.security(ticker.heikinashi(syminfo.tickerid), HTF, high[1], lookahead=barmerge.lookahead_on)
+    lowhtf = request.security(ticker.heikinashi(syminfo.tickerid), HTF, low[1], lookahead=barmerge.lookahead_on)
+    closehtf = request.security(ticker.heikinashi(syminfo.tickerid), HTF, close[1], lookahead=barmerge.lookahead_on)
+
+    // ATR for HTF
+    HTfatr = request.security(ticker.heikinashi(syminfo.tickerid), HTF, ta.atr(Period)[1], lookahead=barmerge.lookahead_on)
+
+    Uphtf = math.abs(highhtf + lowhtf) / 2 - Mult * HTfatr
+    Dnhtf = math.abs(highhtf + lowhtf) / 2 + Mult * HTfatr
+
+    float TUphtf = na
+    float TDownhtf = na
+    TrendHtf = 0
+
+    TUphtf := closehtf[1] > TUphtf[1] ? math.max(Uphtf, TUphtf[1]) : Uphtf
+    TDownhtf := closehtf[1] < TDownhtf[1] ? math.min(Dnhtf, TDownhtf[1]) : Dnhtf
+    TrendHtf := closehtf > TDownhtf[1] ? 1 : closehtf < TUphtf[1] ? -1 : nz(TrendHtf[1], 1)
+
+    [math.round_to_mintick(close), Trend, Trend[1], TrendHtf, TrendHtf[1]]
+

@@ -87,7 +87,7 @@ with open('functions.txt') as f:
     calculations += f.read()
 
 if_condition_text = ''
-with open('if_conditions.txt') as f:
+with open('conditions.txt') as f:
     if_condition_text += f.read()
 
 for k in range(1, j + 1):

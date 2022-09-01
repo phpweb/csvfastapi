@@ -1,18 +1,35 @@
+import os
+
 # how many conditions, excepts close (price)
-indicator_name = 'Benimki Supertrend MTF Heikin Ashi'
+indicator_name = 'Benimki Bottom'
 conditions = {
-    'trend': '// Super trend \\n',
-    'trend_minus_one': '// Super trend minus one \\n',
-    'trendhtf': '// trendhtf \\n',
-    'trendhtf_minus_one': '// trendhtf minus one \\n'
+    'bottom': '// Bottom \\n',
+    'data': '// Data \\n',
+    'bought_price': '// bought_price \\n'
 }
 
 conditions_type = {
-    'trend': 'array.new_int(0) \\n',
-    'trend_minus_one': 'array.new_int(0) \\n',
-    'trendhtf': 'array.new_int(0) \\n',
-    'trendhtf_minus_one': 'array.new_int(0) \\n'
+    'bottom': 'array.new_int(0) \\n',
+    'data': 'array.new_bool(0) \\n',
+    'bought_price': 'array.new_float(0) \\n'
 }
+
+directory = indicator_name.replace(' ', '_').lower()
+if not os.path.isdir(directory):
+    os.mkdir(directory)
+# output directory
+output_directory = directory + '/output'
+if not os.path.isdir(output_directory):
+    os.mkdir(output_directory)
+func_txt = directory + '/functions.txt'
+if not os.path.exists(func_txt):
+    os.close(os.open(func_txt, os.O_CREAT))
+cond_txt = directory + '/conditions.txt'
+if not os.path.exists(cond_txt):
+    os.close(os.open(cond_txt, os.O_CREAT))
+sym_txt = directory + '/all_usdt.csv'
+if not os.path.exists(sym_txt):
+    os.close(os.open(sym_txt, os.O_CREAT))
 
 
 def generate_arrays():
@@ -87,7 +104,7 @@ with open('functions.txt') as f:
     calculations += f.read()
 
 if_condition_text = ''
-with open('if_conditions.txt') as f:
+with open('conditions.txt') as f:
     if_condition_text += f.read()
 
 for k in range(1, j + 1):
@@ -114,7 +131,7 @@ for k in range(1, j + 1):
     headline_part = ''
     with open('head_part_1.txt') as f:
         headline_part += f.read()
-    with open('generated_python.py', 'w') as f:
+    with open(f'{directory}/generated_python.py', 'w') as f:
         f.write(headline_part)
         f.write(array_items)
         f.write(standard_array_items)
